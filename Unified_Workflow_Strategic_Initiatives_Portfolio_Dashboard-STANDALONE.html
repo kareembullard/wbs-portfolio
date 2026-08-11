@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html data-color-scheme="light" lang="en">
+ <head>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Unified Workflow &amp; Strategic Initiatives – Portfolio Dashboard
+  </title>
+  <style>
+/*
+ * Converted to ProjectSuite CSS Architecture
+ * Date: 2025-11-29 04:36:36
+ * Bootstrap/utility classes mapped to ProjectSuite equivalents
+ * Original backed up to: ./asset_backups
+ */
+
+:root {
+  /* Primitive Color Tokens */
+  --color-white: rgba(255, 255, 255, 1);
+  --color-black: rgba(0, 0, 0, 1);
+  --color-cream-50: rgba(252, 252, 249, 1);
+  --color-cream-100: rgba(255, 255, 253, 1);
+  --color-gray-200: rgba(245, 245, 245, 1);
+  --color-gray-300: rgba(167, 169, 169, 1);
+  --color-gray-400: rgba(119, 124, 124, 1);
+  --color-slate-500: rgba(98, 108, 113, 1);
+  --color-brown-600: rgba(94, 82, 64, 1);
+  --color-charcoal-700: rgba(31, 33, 33, 1);
+  --color-charcoal-800: rgba(38, 40, 40, 1);
+  --color-slate-900: rgba(19, 52, 59, 1);
+  --color-teal-300: rgba(50, 184, 198, 1);
+  --color-teal-400: rgba(45, 166, 178, 1);
+  --color-teal-500: rgba(33, 128, 141, 1);
+  --color-teal-600: rgba(29, 116, 128, 1);
+  --color-teal-700: rgba(26, 104, 115, 1);
+  --color-teal-800: rgba(41, 150, 161, 1);
+  --color-red-400: rgba(255, 84, 89, 1);
+  --color-red-500: rgba(192, 21, 47, 1);
+  --color-orange-400: rgba(230, 129, 97, 1);
+  --color-orange-500: rgba(168, 75, 47, 1);
+
+  /* RGB versions for opacity control */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+  --color-slate-500-rgb: 98, 108, 113;
+  --color-red-500-rgb: 192, 21, 47;
+  --color-red-400-rgb: 255, 84, 89;
+  --color-orange-500-rgb: 168, 75, 47;
+  --color-orange-400-rgb: 230, 129, 97;
+
+  /* Background color tokens (Light Mode) */
+  --color-bg-1: rgba(59, 130, 246, 0.08); /* Light blue */
+  --color-bg-2: rgba(245, 158, 11, 0.08); /* Light yellow */
+  --color-bg-3: rgba(34, 197, 94, 0.08); /* Light green */
+  --color-bg-4: rgba(239, 68, 68, 0.08); /* Light red */
+  --color-bg-5: rgba(147, 51, 234, 0.08); /* Light purple */
+  --color-bg-6: rgba(249, 115, 22, 0.08); /* Light orange */
+  --color-bg-7: rgba(236, 72, 153, 0.08); /* Light pink */
+  --color-bg-8: rgba(6, 182, 212, 0.08); /* Light cyan */
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+  --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+
+  /* Common style patterns */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for opacity control */
+  --color-success-rgb: 33, 128, 141;
+  --color-error-rgb: 192, 21, 47;
+  --color-warning-rgb: 168, 75, 47;
+  --color-info-rgb: 98, 108, 113;
+
+  /* Typography */
+  --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo,
+    Monaco, Consolas, monospace;
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 14px;
+  --font-size-lg: 16px;
+  --font-size-xl: 18px;
+  --font-size-2xl: 20px;
+  --font-size-3xl: 24px;
+  --font-size-4xl: 30px;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 550;
+  --font-weight-bold: 600;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --letter-spacing-tight: -0.01em;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-base: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04),
+    0 4px 6px -2px rgba(0, 0, 0, 0.02);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+
+  /* Animation */
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Layout */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* RGB versions for opacity control (Dark Mode) */
+    --color-gray-400-rgb: 119, 124, 124;
+    --color-teal-300-rgb: 50, 184, 198;
+    --color-gray-300-rgb: 167, 169, 169;
+    --color-gray-200-rgb: 245, 245, 245;
+
+    /* Background color tokens (Dark Mode) */
+    --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+    --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+    --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+    --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+    --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+    --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+    --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+    --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+    /* Semantic Color Tokens (Dark Mode) */
+    --color-background: var(--color-charcoal-700);
+    --color-surface: var(--color-charcoal-800);
+    --color-text: var(--color-gray-200);
+    --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+    --color-primary: var(--color-teal-300);
+    --color-primary-hover: var(--color-teal-400);
+    --color-primary-active: var(--color-teal-800);
+    --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+    --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+    --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+    --color-error: var(--color-red-400);
+    --color-success: var(--color-teal-300);
+    --color-warning: var(--color-orange-400);
+    --color-info: var(--color-gray-300);
+    --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+    --color-btn-primary-text: var(--color-slate-900);
+    --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+    --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    --button-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+    --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+    /* Common style patterns - updated for dark mode */
+    --focus-ring: 0 0 0 3px var(--color-focus-ring);
+    --focus-outline: 2px solid var(--color-primary);
+    --status-bg-opacity: 0.15;
+    --status-border-opacity: 0.25;
+    --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+    /* RGB versions for dark mode */
+    --color-success-rgb: var(--color-teal-300-rgb);
+    --color-error-rgb: var(--color-red-400-rgb);
+    --color-warning-rgb: var(--color-orange-400-rgb);
+    --color-info-rgb: var(--color-gray-300-rgb);
+  }
+}
+
+/* Data attribute for manual theme switching */
+[data-color-scheme="dark"] {
+  /* RGB versions for opacity control (dark mode) */
+  --color-gray-400-rgb: 119, 124, 124;
+  --color-teal-300-rgb: 50, 184, 198;
+  --color-gray-300-rgb: 167, 169, 169;
+  --color-gray-200-rgb: 245, 245, 245;
+
+  /* Colorful background palette - Dark Mode */
+  --color-bg-1: rgba(29, 78, 216, 0.15); /* Dark blue */
+  --color-bg-2: rgba(180, 83, 9, 0.15); /* Dark yellow */
+  --color-bg-3: rgba(21, 128, 61, 0.15); /* Dark green */
+  --color-bg-4: rgba(185, 28, 28, 0.15); /* Dark red */
+  --color-bg-5: rgba(107, 33, 168, 0.15); /* Dark purple */
+  --color-bg-6: rgba(194, 65, 12, 0.15); /* Dark orange */
+  --color-bg-7: rgba(190, 24, 93, 0.15); /* Dark pink */
+  --color-bg-8: rgba(8, 145, 178, 0.15); /* Dark cyan */
+
+  /* Semantic Color Tokens (Dark Mode) */
+  --color-background: var(--color-charcoal-700);
+  --color-surface: var(--color-charcoal-800);
+  --color-text: var(--color-gray-200);
+  --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+  --color-primary: var(--color-teal-300);
+  --color-primary-hover: var(--color-teal-400);
+  --color-primary-active: var(--color-teal-800);
+  --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+  --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+  --color-error: var(--color-red-400);
+  --color-success: var(--color-teal-300);
+  --color-warning: var(--color-orange-400);
+  --color-info: var(--color-gray-300);
+  --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+  --color-btn-primary-text: var(--color-slate-900);
+  --color-card-border: rgba(var(--color-gray-400-rgb), 0.15);
+  --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+  --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  --color-border-secondary: rgba(var(--color-gray-400-rgb), 0.2);
+  --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+
+  /* Common style patterns - updated for dark mode */
+  --focus-ring: 0 0 0 3px var(--color-focus-ring);
+  --focus-outline: 2px solid var(--color-primary);
+  --status-bg-opacity: 0.15;
+  --status-border-opacity: 0.25;
+  --select-caret-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  --select-caret-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5f5f5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+  /* RGB versions for dark mode */
+  --color-success-rgb: var(--color-teal-300-rgb);
+  --color-error-rgb: var(--color-red-400-rgb);
+  --color-warning-rgb: var(--color-orange-400-rgb);
+  --color-info-rgb: var(--color-gray-300-rgb);
+}
+
+[data-color-scheme="light"] {
+  /* RGB versions for opacity control (light mode) */
+  --color-brown-600-rgb: 94, 82, 64;
+  --color-teal-500-rgb: 33, 128, 141;
+  --color-slate-900-rgb: 19, 52, 59;
+
+  /* Semantic Color Tokens (Light Mode) */
+  --color-background: var(--color-cream-50);
+  --color-surface: var(--color-cream-100);
+  --color-text: var(--color-slate-900);
+  --color-text-secondary: var(--color-slate-500);
+  --color-primary: var(--color-teal-500);
+  --color-primary-hover: var(--color-teal-600);
+  --color-primary-active: var(--color-teal-700);
+  --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+  --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+  --color-btn-primary-text: var(--color-cream-50);
+  --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+  --color-error: var(--color-red-500);
+  --color-success: var(--color-teal-500);
+  --color-warning: var(--color-orange-500);
+  --color-info: var(--color-slate-500);
+  --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+
+  /* RGB versions for light mode */
+  --color-success-rgb: var(--color-teal-500-rgb);
+  --color-error-rgb: var(--color-red-500-rgb);
+  --color-warning-rgb: var(--color-orange-500-rgb);
+  --color-info-rgb: var(--color-slate-500-rgb);
+}
+
+/* Base styles */
+html {
+  font-size: var(--font-size-base);
+  font-family: var(--font-family-base);
+  line-height: var(--line-height-normal);
+  color: var(--color-text);
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--font-size-4xl);
+}
+h2 {
+  font-size: var(--font-size-3xl);
+}
+h3 {
+  font-size: var(--font-size-2xl);
+}
+h4 {
+  font-size: var(--font-size-xl);
+}
+h5 {
+  font-size: var(--font-size-lg);
+}
+h6 {
+  font-size: var(--font-size-md);
+}
+
+p {
+  margin: 0 0 var(--space-16) 0;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+code,
+pre {
+  font-family: var(--font-family-mono);
+  font-size: calc(var(--font-size-base) * 0.95);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-sm);
+}
+
+code {
+  padding: var(--space-1) var(--space-4);
+}
+
+pre {
+  padding: var(--space-16);
+  margin: var(--space-16) 0;
+  overflow: auto;
+  border: 1px solid var(--color-border);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-16);
+  border-radius: var(--radius-base);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-standard);
+  border: none;
+  text-decoration: none;
+  position: relative;
+}
+
+.btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.btn--primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+}
+
+.btn--primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn--primary:active {
+  background: var(--color-primary-active);
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn--secondary:hover {
+  background: var(--color-secondary-hover);
+}
+
+.btn--secondary:active {
+  background: var(--color-secondary-active);
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn--outline:hover {
+  background: var(--color-secondary);
+}
+
+.btn--sm {
+  padding: var(--space-4) var(--space-12);
+  font-size: var(--font-size-sm);
+  border-radius: var(--radius-sm);
+}
+
+.btn--lg {
+  padding: var(--space-10) var(--space-20);
+  font-size: var(--font-size-lg);
+  border-radius: var(--radius-md);
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form elements */
+.form-control {
+  display: block;
+  width: 100%;
+  padding: var(--space-8) var(--space-12);
+  font-size: var(--font-size-md);
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-base);
+  transition: border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard);
+}
+
+textarea.form-control {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+}
+
+select.form-control {
+  padding: var(--space-8) var(--space-12);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: var(--select-caret-light);
+  background-repeat: no-repeat;
+  background-position: right var(--space-12) center;
+  background-size: 16px;
+  padding-right: var(--space-32);
+}
+
+/* Add a dark mode specific caret */
+@media (prefers-color-scheme: dark) {
+  select.form-control {
+    background-image: var(--select-caret-dark);
+  }
+}
+
+/* Also handle data-color-scheme */
+[data-color-scheme="dark"] select.form-control {
+  background-image: var(--select-caret-dark);
+}
+
+[data-color-scheme="light"] select.form-control {
+  background-image: var(--select-caret-light);
+}
+
+.form-control:focus {
+  border-color: var(--color-primary);
+  outline: var(--focus-outline);
+}
+
+.form-label {
+  display: block;
+  margin-bottom: var(--space-8);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.form-group {
+  margin-bottom: var(--space-16);
+}
+
+/* Card component */
+.card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-card-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow var(--duration-normal) var(--ease-standard);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.card__body {
+  padding: var(--space-16);
+}
+
+.card__header,
+.card__footer {
+  padding: var(--space-16);
+  border-bottom: 1px solid var(--color-card-border-inner);
+}
+
+/* Status indicators - simplified with CSS variables */
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+}
+
+.status--success {
+  background-color: rgba(
+    var(--color-success-rgb, 33, 128, 141),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-success);
+  border: 1px solid
+    rgba(var(--color-success-rgb, 33, 128, 141), var(--status-border-opacity));
+}
+
+.status--error {
+  background-color: rgba(
+    var(--color-error-rgb, 192, 21, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-error);
+  border: 1px solid
+    rgba(var(--color-error-rgb, 192, 21, 47), var(--status-border-opacity));
+}
+
+.status--warning {
+  background-color: rgba(
+    var(--color-warning-rgb, 168, 75, 47),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-warning);
+  border: 1px solid
+    rgba(var(--color-warning-rgb, 168, 75, 47), var(--status-border-opacity));
+}
+
+.status--info {
+  background-color: rgba(
+    var(--color-info-rgb, 98, 108, 113),
+    var(--status-bg-opacity)
+  );
+  color: var(--color-info);
+  border: 1px solid
+    rgba(var(--color-info-rgb, 98, 108, 113), var(--status-border-opacity));
+}
+
+/* Container layout */
+.section-content {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--space-16);
+  padding-left: var(--space-16);
+}
+
+@media (min-width: 640px) {
+  .section-content {
+    max-width: var(--container-sm);
+  }
+}
+@media (min-width: 768px) {
+  .section-content {
+    max-width: var(--container-md);
+  }
+}
+@media (min-width: 1024px) {
+  .section-content {
+    max-width: var(--container-lg);
+  }
+}
+@media (min-width: 1280px) {
+  .section-content {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Utility classes */
+.flex {
+  display: flex;
+}
+.flex-col {
+  flex-direction: column;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.gap-4 {
+  gap: var(--space-4);
+}
+.gap-8 {
+  gap: var(--space-8);
+}
+.gap-16 {
+  gap: var(--space-16);
+}
+
+.block {
+  display: block;
+}
+.hidden {
+  display: none;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: 2px;
+}
+
+/* Dark mode specifics */
+[data-color-scheme="dark"] .btn--outline {
+  border: 1px solid var(--color-border-secondary);
+}
+
+@font-face {
+  font-family: 'FKGroteskNeue';
+  src: url('https://r2cdn.perplexity.ai/fonts/FKGroteskNeue.woff2')
+    format('woff2');
+}
+
+/* END PERPLEXITY DESIGN SYSTEM */
+/* Additional custom styles for Unified Workflow & Strategic Initiatives dashboard */
+
+body {
+  display: flex;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  height: 64px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header__title {
+  font-size: var(--font-size-xl);
+}
+
+/* Sidebar */
+.side-nav {
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  width: 240px;
+  padding: var(--space-16);
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+.side-nav__form {
+  list-style: none;
+}
+.side-nav__radio {
+  display: flex;
+  gap: var(--space-8);
+  align-items: center;
+  font-size: var(--font-size-md);
+  cursor: pointer;
+}
+.side-nav__radio input {
+  accent-color: var(--color-primary);
+}
+
+@media (max-width: 767px) {
+  .side-nav {
+    position: fixed;
+    transform: translateX(-100%);
+    transition: transform var(--duration-normal) var(--ease-standard);
+    height: calc(100% - 64px);
+    top: 64px;
+    left: 0;
+    z-index: 200;
+  }
+  .sidebar--open {
+    transform: translateX(0);
+  }
+}
+
+/* Main content */
+.main {
+  flex: 1;
+  padding: var(--space-16);
+  overflow-y: auto;
+}
+
+.section-container {
+  margin-bottom: var(--space-32);
+}
+.section-title {
+  margin-bottom: var(--space-16);
+}
+
+/* View sections */
+.view-section.hidden {
+  display: none;
+}
+.view-section.active {
+  display: block;
+}
+
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+.table th,
+.table td {
+  border: 1px solid var(--color-border);
+  padding: var(--space-8);
+  text-align: left;
+}
+.table th {
+  background: var(--color-secondary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* WBS tree */
+.wbs-tree {
+  list-style: none;
+  padding-left: 0;
+  font-size: var(--font-size-sm);
+}
+.wbs-tree li {
+  margin-bottom: var(--space-4);
+}
+.wbs-toggle {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.wbs-toggle::before {
+  content: '\25B6'; /* right-pointing triangle */
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+.wbs-toggle[aria-expanded="true"]::before {
+  transform: rotate(90deg);
+}
+.wbs-leaf {
+  margin-left: var(--space-12);
+  cursor: pointer;
+}
+
+/* Buttons */
+#dark-toggle {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}
+
+/* File upload table */
+.file-link {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+</style>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  
+  
+  
+  
+ </head>
+ <body>
+  <!-- Header -->
+  <header class="header flex items-center px-16" id="header">
+   <h1 class="header__title">
+    Unified Workflow &amp; Strategic Initiatives
+   </h1>
+   <button aria-label="Toggle dark mode" class="btn btn--secondary" id="dark-toggle">
+    🌙
+   </button>
+  </header>
+  <!-- Sidebar Navigation -->
+  <nav aria-label="Main navigation" class="side-nav nav-bar" id="sidebar">
+   <form class="sidebar__form flex gap-8" id="navForm">
+    <label class="sidebar__radio">
+     <input checked="" name="view" type="radio" value="home"/>
+     Home / Project Wiki
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="wbs"/>
+     WBS Dashboard
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="dictionary"/>
+     WBS Dictionary
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="tasks"/>
+     Task Tracker
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="assets"/>
+     Asset Catalog
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="reporting"/>
+     Reporting Forms
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="knowledge"/>
+     Knowledge Library
+    </label>
+   </form>
+  </nav>
+  <!-- Main Content -->
+  <main class="main" id="main">
+   <!-- Home / Wiki View -->
+   <section class="view-section section-container" id="view-home">
+    <h2 class="section-title">
+     Project Overview
+    </h2>
+    <div class="card" id="homeContent">
+     <div class="card__body" id="homeBody">
+     </div>
+    </div>
+   </section>
+   <!-- WBS Dashboard -->
+   <section class="view-section section-container hidden" id="view-wbs">
+    <h2 class="section-title">
+     Work Breakdown Structure
+    </h2>
+    <div class="flex gap-16">
+     <div class="card" style="min-width:280px;flex:1;">
+      <div class="card__body">
+       <ul class="wbs-tree" id="wbsTree">
+       </ul>
+      </div>
+     </div>
+     <div class="card" style="flex:2;">
+      <div class="card__body" id="wbsDetail">
+       <p>
+        Select a WBS element to view its details.
+       </p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- WBS Dictionary -->
+   <section class="view-section section-container hidden" id="view-dictionary">
+    <h2 class="section-title">
+     WBS Dictionary
+    </h2>
+    <div class="flex gap-16 mb-8">
+     <input class="form-control" id="dictSearch" placeholder="Search element or description" style="flex:2;" type="text"/>
+     <select class="form-control" id="tagFilter" multiple="" style="flex:1;">
+     </select>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="dictTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Task Tracker -->
+   <section class="view-section section-container hidden" id="view-tasks">
+    <div class="flex items-center mb-8">
+     <h2 class="section-title">
+      Task Tracker
+     </h2>
+     <button class="btn btn--primary btn--sm" id="addTaskBtn">
+      Add Task
+     </button>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="taskTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Asset Catalog -->
+   <section class="view-section section-container hidden" id="view-assets">
+    <h2 class="section-title">
+     Asset Catalog
+    </h2>
+    <div class="flex gap-16 mb-8 items-center">
+     <input id="fileUpload" multiple="" type="file"/>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="fileTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Reporting Forms -->
+   <section class="view-section section-container hidden" id="view-reporting">
+    <h2 class="section-title">
+     Status Reporting
+    </h2>
+    <div class="card mb-16">
+     <div class="card__body">
+      <form class="flex gap-16" id="reportForm">
+       <div class="flex gap-16">
+        <div>
+         <label class="form-label" for="reportWBS">
+          WBS ID
+         </label>
+         <select class="form-control" id="reportWBS">
+         </select>
+        </div>
+        <div>
+         <label class="form-label" for="reportStatus">
+          Status Update
+         </label>
+         <textarea class="form-control" id="reportStatus" rows="3"></textarea>
+        </div>
+       </div>
+       <div class="flex gap-16">
+        <div>
+         <label class="form-label" for="reportRisks">
+          Risks
+         </label>
+         <textarea class="form-control" id="reportRisks" rows="3"></textarea>
+        </div>
+        <div>
+         <label class="form-label" for="reportActions">
+          Next Actions
+         </label>
+         <textarea class="form-control" id="reportActions" rows="3"></textarea>
+        </div>
+       </div>
+       <div class="flex">
+        <button class="btn btn--primary" type="submit">
+         Submit Report
+        </button>
+       </div>
+      </form>
+     </div>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="reportTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Knowledge Library -->
+   <section class="view-section section-container hidden" id="view-knowledge">
+    <h2 class="section-title">
+     Knowledge Library
+    </h2>
+    <div class="flex gap-16 mb-8">
+     <select class="form-control" id="pageSelect" style="flex:1;">
+     </select>
+     <button class="btn btn--primary btn--sm" id="saveWiki">
+      Save
+     </button>
+    </div>
+    <textarea class="form-control mb-16" id="wikiEditor" placeholder="Write markdown here..." rows="8"></textarea>
+    <div class="card">
+     <div class="card__body" id="wikiDisplay">
+     </div>
+    </div>
+   </section>
+  </main>
+  <script>
+/* app.js – Unified Workflow & Strategic Initiatives dashboard (no external storage) */
+(() => {
+  // ----------------------------- Data ------------------------------------ //
+  const WBS_STRUCTURE = {"1.0 Unified Workflow and Strategic Initiatives": {"1.1 Business Initiatives": {"1.1.1 Gem Droppers Content Creation and Sharing Initiative (GDCCSI)": null,"1.1.2 Sales - $5,000 Digital Products by July 1, 2025": null,"1.1.3 Get in the Cannon Project": null,"1.1.4 Networking Client Acquisition": null,"1.1.5 Freelance Prospecting": null},"1.2 Personal Development & Well-being": {"1.2.1 Memoir Writing": null,"1.2.2 Creative Resurgence Epic": null,"1.2.3 Professional Certifications Renewal": null,"1.2.4 Health & Diet Management": null,"1.2.5 Leisure & Entertainment": null,"1.2.6 K2L Project": null},"1.3 System Development & Maintenance": {"1.3.1 Airtable Multi-Layered Productivity System Setup": null,"1.3.2 Custom Productivity Apps Development": null,"1.3.3 Suno Export & Music Management (Suno-EXP-2025)": null,"1.3.4 Automation Bot Development": null,"1.3.5 Knowledge Management Tool Optimization": null},"1.4 Financial Management": {"1.4.1 Bankruptcy Process (CH7-BK-2025)": null,"1.4.2 Budget & Financial Control": null}}};
+
+  const WBS_DICTIONARY = {"1.1.1": {"Element": "Gem Droppers Content Creation and Sharing Initiative (GDCCSI)","Description": "High-value project focused on content creation and sharing, involving ebook development, holiday posts, and exploring Substack as an outlet.","Deliverables": "- First Ebook (CFE-2025 Project)\n- Finalized ebook task lists\n- Holiday posts collection\n- Launched website webstore","Phases": "Network, Conduct","Timeline": "Ebook task lists finalized by June 31, 2025","Tags/Notes": "ProductionArea, High-Value, Active"},"1.1.2": {"Element": "Sales - $5,000 Digital Products by July 1, 2025","Description": "Direct sales objective to achieve specific revenue target from digital products.","Deliverables": "$5,000 worth of digital products sold with measurable sales tracking.","Phases": "Conduct, Control, Market","Timeline": "Goal date: July 1, 2025 (8-hour estimated duration)","Tags/Notes": "BusinessP, Maintain, Sale, Prjttask, Blocked"},"1.1.3": {"Element": "Get in the Cannon Project","Description": "Ongoing daily recurring business-oriented project implying consistent market-related activities.","Deliverables": "Consistent market outreach and business growth outcomes.","Phases": "Market, Conduct","Timeline": "Starts July 24, 2025; repeats every two days, skipping weekends (8 hours)","Tags/Notes": "BusinessP, MVP, Started, Execute, Must"},"1.1.4": {"Element": "Networking Client Acquisition","Description": "Ongoing activities focused on building connections and acquiring clients.","Deliverables": "Client leads, professional connections, expanded network.","Phases": "Conduct, Network","Timeline": "Starts July 24, 2025; repeats every two days (8 hours). Associated with Q1, Q2 planning.","Tags/Notes": "BusinessArea, CareerArea, Must"},"1.1.5": {"Element": "Freelance Prospecting","Description": "Activities aimed at finding and applying for freelance jobs/gigs.","Deliverables": "- Prospect Apply to 5 Jobs\n- Prospect Apply for 5 Gigs\n- Review Prospects\n- Job tracker links","Phases": "Prospect, Scope, Research, Network","Timeline": "Starts July 24, 2025; repeats every two days, skipping weekends (8 hours)","Tags/Notes": "K2L, MVP, Objective, Must"},"1.2.1": {"Element": "Memoir Writing","Description": "Ongoing project focused on writing memoir, including reminiscing memories and setting up voice input app.","Deliverables": "- Memoir content from reminiscing memories\n- Setup of memoir app for voice input\n- Branch Off Moments system","Phases": "Document, Develop, Review","Timeline": "Starts July 24, 2025; repeats every three days (8 hours). Sub-task started June 27, 2025","Tags/Notes": "Life, PersonalArea, PersonalF, Write, Operation"},"1.2.2": {"Element": "Creative Resurgence Epic","Description": "Ongoing project focused on creative output and artistic development.","Deliverables": "Creative works and progress in creative endeavors.","Phases": "Conduct, LeisureEntertainment","Timeline": "Starts July 24, 2025; repeats weekly on Saturdays and Sundays (8 hours each)","Tags/Notes": "ProductionArea, Recreation, Project, Active, Execute"},"1.2.3": {"Element": "Professional Certifications Renewal","Description": "Proactive management of professional certifications including learning and execution for renewal.","Deliverables": "- Completed CompTIA A+ certification\n- Completed CompTIA Security+ certification","Phases": "Conduct, Educate, Research","Timeline": "Both certifications due February 1, 2026","Tags/Notes": "Blocked, Learn, EducationArea, Must, One Year to Go!"},"1.2.4": {"Element": "Health & Diet Management","Description": "Activities focused on maintaining and improving personal health and dietary habits.","Deliverables": "- Meal prep (veggies)\n- Adherence to specific diets (juice, vegetarian)\n- Improved health monitoring","Phases": "Setup, Research, Resource, Control, Review, Ideate","Timeline": "Meal Prep repeats weekly on Sundays. Juice Diet due August 2, 2025","Tags/Notes": "HealthF, Health, Personal, PersonalF, Must, Should"},"1.3.1": {"Element": "Airtable Multi-Layered Productivity System Setup","Description": "Major project to transform Airtable base into dynamic, automated productivity engine with five internal phases.","Deliverables": "- Functional, automated Airtable system\n- Four-table structure (Tasks, Days, Weeks, Months)\n- Key fields and date formulas\n- Automated record generation\n- Progress dashboard with rollup fields","Phases": "Setup. Internal phases: Foundation, Weaving, Autopilot, Dashboard, Advanced","Timeline": "Task entry date: July 24, 2025","Tags/Notes": "Active, Airtable"},"1.3.2": {"Element": "Custom Productivity Apps Development","Description": "Initiative to build custom productivity applications, including customized Routinery App.","Deliverables": "- New applications or customized Routinery App\n- Interactive mindmaps\n- Flow charts for decisions\n- APK applications","Phases": "Develop, Setup","Timeline": "25-minute estimate for development tasks","Tags/Notes": "Produce, Build, AppDev, Task"},"1.3.3": {"Element": "Suno Export & Music Management (Suno-EXP-2025)","Description": "Comprehensive management of music creations from Suno platform, including organizing, processing, producing, editing, and sharing.","Deliverables": "- Organized, edited Suno music creations\n- Suno data scraping tool\n- Weekly new Suno tracks\n- Imported/edited tracks in Ableton","Phases": "Conduct","Timeline": "Starts July 24, 2025; repeats weekly on weekends (8 hours). Deadlines: March 25, 2025 for organization/tool development.","Tags/Notes": "ProductionArea, Suno, Must"},"1.3.4": {"Element": "Automation Bot Development","Description": "Design, development, and integration of various bots and automation tools to streamline processes.","Deliverables": "- Task Merging Bot\n- Batch Researching Bot\n- Hashtag Bot for bulk task additions\n- API and automation integrations","Phases": "Setup, Develop, Control, Research, Optimize","Timeline": "Various bots listed as backlog tasks. Task Merging Bot is active.","Tags/Notes": "ToolsF, AdminF, AI, Automation"},"1.3.5": {"Element": "Knowledge Management Tool Optimization","Description": "Ongoing setup, maintenance, and optimization of digital tools, databases, and knowledge management systems.","Deliverables": "- Organized Obsidian vaults\n- Updated guides\n- Streamlined Notion projects\n- Optimized system performance\n- Updated macros","Phases": "Setup, Optimize, Control, Review","Timeline": "Manage Tools repeats weekly on Thursdays. Fix Macros due July 24, 2025.","Tags/Notes": "AdminF, ToolsF, Maintain, Should"},"1.4.1": {"Element": "Bankruptcy Process (CH7-BK-2025)","Description": "Significant personal and financial process, specifically executing Chapter 7 Bankruptcy.","Deliverables": "Completion of Chapter 7 Bankruptcy process and financial reorganization.","Phases": "Setup, Conduct, Control, Finance","Timeline": "Task entry date: July 24, 2025 (estimated 600 minutes)","Tags/Notes": "H-Impact-H-Effort, Must, Blocked, PersonalArea"},"1.4.2": {"Element": "Budget & Financial Control","Description": "Managing financial aspects and budgeting, including setting and controlling budgets.","Deliverables": "- Set budgets\n- Updated financial records\n- Controlled finances\n- Monthly Distrokid updates","Phases": "Control, Finance, Review, Market","Timeline": "Set Budget repeats weekly, skipping weekends. Monthly Distrokid updates.","Tags/Notes": "Maintain, Must, PersonalF"}};
+
+  // ----------------------------- State ------------------------------------ //
+  const state = {
+    currentView: 'home',
+    tasks: [],
+    files: [],
+    reports: [],
+    pages: {},
+  };
+
+  // ---------------------- Utility / Helper Functions ---------------------- //
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  // Simple markdown parser (very minimal)
+  function parseMarkdown(md) {
+    const lines = md.split(/\n/);
+    return lines
+      .map((l) => {
+        if (l.startsWith('### ')) return `<h3>${l.slice(4)}</h3>`;
+        if (l.startsWith('## ')) return `<h2>${l.slice(3)}</h2>`;
+        if (l.startsWith('# ')) return `<h1>${l.slice(2)}</h1>`;
+        if (l.startsWith('- ')) return `<li>${l.slice(2)}</li>`;
+        return `<p>${l}</p>`;
+      })
+      .join('')
+      .replace(/<li>([\s\S]*?)<\/li>/g, (m) => `<ul>${m}</ul>`);
+  }
+
+  function getUniqueTags() {
+    const set = new Set();
+    Object.values(WBS_DICTIONARY).forEach((d) => {
+      d['Tags/Notes']?.split(',').forEach((t) => set.add(t.trim()));
+    });
+    return Array.from(set).filter(Boolean).sort();
+  }
+
+  function generateInitialTasks() {
+    let idCounter = 1;
+    Object.entries(WBS_DICTIONARY).forEach(([wbsId, data]) => {
+      const deliverables = data.Deliverables.split(/\n/).map((l) => l.replace(/^[-•]\s*/, '').trim()).filter(Boolean);
+      deliverables.forEach((task) => {
+        state.tasks.push({
+          id: idCounter++,
+          task,
+          wbs: wbsId,
+          status: 'To Do',
+          priority: '',
+          due: '',
+          assigned: '',
+        });
+      });
+    });
+  }
+
+  // ------------------------- View Management ----------------------------- //
+  function showView(view) {
+    state.currentView = view;
+    document.querySelectorAll('.view-section').forEach((sec) => {
+      sec.classList.add('hidden');
+      sec.classList.remove('active');
+    });
+    const targetView = document.getElementById(`view-${view}`);
+    if (targetView) {
+      targetView.classList.remove('hidden');
+      targetView.classList.add('active');
+    }
+  }
+
+  // ------------------------- Home / Wiki ---------------------------------- //
+  function renderHome() {
+    const md = `# Unified Workflow & Strategic Initiatives\n\nThe Work Breakdown Structure (WBS) organizes all program work into manageable sections. Browse the dashboard to explore details, tasks, assets, reports and knowledge.\n\n**Sponsor:** Kareem Bullard`;
+    $('homeBody').innerHTML = parseMarkdown(md);
+  }
+
+  // ---------------------- WBS Dashboard ----------------------------------- //
+  function buildTree(container, structure) {
+    container.innerHTML = '';
+
+    function recurse(nodeObj, parentUl) {
+      Object.entries(nodeObj).forEach(([key, val]) => {
+        const li = document.createElement('li');
+        const idMatch = key.match(/^[0-9.]+/);
+        const wbsId = idMatch ? idMatch[0] : '';
+        const name = key.replace(/^[0-9.]+\s*/, '');
+
+        if (val) {
+          // branch
+          const toggle = document.createElement('span');
+          toggle.className = 'wbs-toggle';
+          toggle.textContent = `${wbsId} ${name}`;
+          toggle.setAttribute('aria-expanded', 'false');
+          const childUl = document.createElement('ul');
+          childUl.classList.add('hidden');
+          toggle.addEventListener('click', () => {
+            const expanded = toggle.getAttribute('aria-expanded') === 'true';
+            toggle.setAttribute('aria-expanded', String(!expanded));
+            childUl.classList.toggle('hidden', expanded);
+          });
+          li.appendChild(toggle);
+          li.appendChild(childUl);
+          recurse(val, childUl);
+        } else {
+          // leaf
+          const leaf = document.createElement('span');
+          leaf.className = 'wbs-leaf';
+          leaf.dataset.wbs = wbsId;
+          leaf.textContent = `${wbsId} ${name}`;
+          leaf.addEventListener('click', () => showWbsDetail(wbsId));
+          li.appendChild(leaf);
+        }
+        parentUl.appendChild(li);
+      });
+    }
+
+    recurse(structure, container);
+  }
+
+  function showWbsDetail(wbsId) {
+    const data = WBS_DICTIONARY[wbsId];
+    if (!data) {
+      $('wbsDetail').innerHTML = `<p>No dictionary entry found for ${wbsId}</p>`;
+      return;
+    }
+    const html = `
+      <h3>${wbsId} – ${data.Element}</h3>
+      <p><strong>Description:</strong> ${data.Description}</p>
+      <p><strong>Deliverables:</strong><br>${data.Deliverables.replace(/\n/g, '<br>')}</p>
+      <p><strong>Phases:</strong> ${data.Phases}</p>
+      <p><strong>Timeline:</strong> ${data.Timeline}</p>
+      <p><strong>Tags/Notes:</strong> ${data['Tags/Notes']}</p>
+    `;
+    $('wbsDetail').innerHTML = html;
+  }
+
+  // ------------------------ Dictionary ------------------------------------ //
+  function populateTagFilter() {
+    const sel = $('tagFilter');
+    sel.innerHTML = '';
+    getUniqueTags().forEach((tag) => {
+      const opt = document.createElement('option');
+      opt.value = tag;
+      opt.textContent = tag;
+      sel.appendChild(opt);
+    });
+  }
+
+  function renderDictionary() {
+    const searchVal = $('dictSearch').value.toLowerCase();
+    const selectedTags = Array.from($('tagFilter').selectedOptions).map((o) => o.value);
+
+    const rows = Object.entries(WBS_DICTIONARY).filter(([_, d]) => {
+      const haystack = `${d.Element} ${d.Description}`.toLowerCase();
+      const matchesSearch = haystack.includes(searchVal);
+      const tags = d['Tags/Notes']?.split(',').map((t) => t.trim());
+      const matchesTags = selectedTags.length === 0 || selectedTags.every((t) => tags?.includes(t));
+      return matchesSearch && matchesTags;
+    });
+
+    const table = $('dictTable');
+    table.innerHTML = '';
+    const header = document.createElement('tr');
+    ['WBS ID', 'Element', 'Description', 'Timeline', 'Tags/Notes'].forEach((h) => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      header.appendChild(th);
+    });
+    table.appendChild(header);
+
+    rows.forEach(([wbsId, d]) => {
+      const tr = document.createElement('tr');
+      const cells = [wbsId, d.Element, d.Description, d.Timeline, d['Tags/Notes']];
+      cells.forEach((c) => {
+        const td = document.createElement('td');
+        td.textContent = c;
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+  }
+
+  // ---------------------------- Tasks ------------------------------------- //
+  function renderTaskTable() {
+    const table = $('taskTable');
+    table.innerHTML = '';
+    const header = document.createElement('tr');
+    ['Task', 'WBS ID', 'Status', 'Priority', 'Due Date', 'Assigned To', ''].forEach((h) => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      header.appendChild(th);
+    });
+    table.appendChild(header);
+
+    state.tasks.forEach((t, idx) => {
+      const tr = document.createElement('tr');
+      tr.dataset.index = idx;
+
+      // Task
+      const tdTask = document.createElement('td');
+      const inpTask = document.createElement('input');
+      inpTask.type = 'text';
+      inpTask.value = t.task;
+      inpTask.className = 'form-control';
+      inpTask.addEventListener('input', () => (t.task = inpTask.value));
+      tdTask.appendChild(inpTask);
+      tr.appendChild(tdTask);
+
+      // WBS (readonly)
+      const tdWbs = document.createElement('td');
+      tdWbs.textContent = t.wbs;
+      tr.appendChild(tdWbs);
+
+      // Status
+      const tdStatus = document.createElement('td');
+      const selStatus = document.createElement('select');
+      selStatus.className = 'form-control';
+      ['To Do', 'In Progress', 'Done'].forEach((s) => {
+        const o = document.createElement('option');
+        o.value = s;
+        o.textContent = s;
+        if (t.status === s) o.selected = true;
+        selStatus.appendChild(o);
+      });
+      selStatus.addEventListener('change', () => (t.status = selStatus.value));
+      tdStatus.appendChild(selStatus);
+      tr.appendChild(tdStatus);
+
+      // Priority
+      const tdPri = document.createElement('td');
+      const inPri = document.createElement('input');
+      inPri.type = 'text';
+      inPri.className = 'form-control';
+      inPri.value = t.priority;
+      inPri.addEventListener('input', () => (t.priority = inPri.value));
+      tdPri.appendChild(inPri);
+      tr.appendChild(tdPri);
+
+      // Due date
+      const tdDue = document.createElement('td');
+      const inDue = document.createElement('input');
+      inDue.type = 'date';
+      inDue.className = 'form-control';
+      inDue.value = t.due;
+      inDue.addEventListener('input', () => (t.due = inDue.value));
+      tdDue.appendChild(inDue);
+      tr.appendChild(tdDue);
+
+      // Assigned
+      const tdAssign = document.createElement('td');
+      const inAssign = document.createElement('input');
+      inAssign.type = 'text';
+      inAssign.className = 'form-control';
+      inAssign.value = t.assigned;
+      inAssign.addEventListener('input', () => (t.assigned = inAssign.value));
+      tdAssign.appendChild(inAssign);
+      tr.appendChild(tdAssign);
+
+      // Delete btn
+      const tdDel = document.createElement('td');
+      const delBtn = document.createElement('button');
+      delBtn.textContent = '🗑️';
+      delBtn.className = 'btn btn--secondary btn--sm';
+      delBtn.addEventListener('click', () => {
+        state.tasks.splice(idx, 1);
+        renderTaskTable();
+      });
+      tdDel.appendChild(delBtn);
+      tr.appendChild(tdDel);
+
+      table.appendChild(tr);
+    });
+  }
+
+  // ------------------------- Assets --------------------------------------- //
+  function renderFileTable() {
+    const table = $('fileTable');
+    table.innerHTML = '';
+    const header = document.createElement('tr');
+    ['Name', 'Size (KB)', 'Type', 'Download'].forEach((h) => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      header.appendChild(th);
+    });
+    table.appendChild(header);
+
+    state.files.forEach((f) => {
+      const tr = document.createElement('tr');
+      const nameTd = document.createElement('td');
+      nameTd.textContent = f.file.name;
+      const sizeTd = document.createElement('td');
+      sizeTd.textContent = (f.file.size / 1024).toFixed(1);
+      const typeTd = document.createElement('td');
+      typeTd.textContent = f.file.type || '—';
+      const downTd = document.createElement('td');
+      const a = document.createElement('a');
+      a.href = f.url;
+      a.download = f.file.name;
+      a.textContent = 'Download';
+      a.className = 'file-link';
+      downTd.appendChild(a);
+      [nameTd, sizeTd, typeTd, downTd].forEach((td) => tr.appendChild(td));
+      table.appendChild(tr);
+    });
+  }
+
+  // ------------------------ Reporting ------------------------------------- //
+  function populateReportWbs() {
+    const sel = $('reportWBS');
+    sel.innerHTML = '';
+    Object.keys(WBS_DICTIONARY).forEach((id) => {
+      const opt = document.createElement('option');
+      opt.value = id;
+      opt.textContent = `${id} – ${WBS_DICTIONARY[id].Element}`;
+      sel.appendChild(opt);
+    });
+  }
+
+  function renderReportTable() {
+    const table = $('reportTable');
+    table.innerHTML = '';
+    const header = document.createElement('tr');
+    ['Date', 'WBS ID', 'Status Update', 'Risks', 'Next Actions'].forEach((h) => {
+      const th = document.createElement('th');
+      th.textContent = h;
+      header.appendChild(th);
+    });
+    table.appendChild(header);
+
+    state.reports.forEach((r) => {
+      const tr = document.createElement('tr');
+      [r.date, r.wbs, r.status, r.risks, r.actions].forEach((val) => {
+        const td = document.createElement('td');
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+  }
+
+  // ----------------------- Knowledge Library ------------------------------ //
+  function refreshPageSelect() {
+    const sel = $('pageSelect');
+    sel.innerHTML = '';
+    const optNew = document.createElement('option');
+    optNew.value = '__new__';
+    optNew.textContent = '— New Page —';
+    sel.appendChild(optNew);
+    Object.keys(state.pages).forEach((title) => {
+      const opt = document.createElement('option');
+      opt.value = title;
+      opt.textContent = title;
+      sel.appendChild(opt);
+    });
+    sel.value = '__new__';
+    $('wikiEditor').value = '';
+    $('wikiDisplay').innerHTML = '';
+  }
+
+  function saveWikiPage() {
+    const sel = $('pageSelect');
+    let title = sel.value;
+    if (title === '__new__') {
+      title = prompt('Enter page title');
+      if (!title) return;
+    }
+    state.pages[title] = $('wikiEditor').value;
+    refreshPageSelect();
+    $('pageSelect').value = title;
+    renderWikiDisplay();
+  }
+
+  function renderWikiDisplay() {
+    const title = $('pageSelect').value;
+    const md = state.pages[title] || '';
+    $('wikiDisplay').innerHTML = parseMarkdown(md);
+  }
+
+  // -------------------------- Dark Mode ----------------------------------- //
+  function toggleDarkMode() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-color-scheme') === 'dark';
+    html.setAttribute('data-color-scheme', isDark ? 'light' : 'dark');
+    $('dark-toggle').textContent = isDark ? '🌙' : '☀️';
+  }
+
+  // ---------------------------- Init -------------------------------------- //
+  function bindEvents() {
+    // sidebar radio navigation
+    document.querySelectorAll('#navForm input[name="view"]').forEach((radio) => {
+      radio.addEventListener('change', () => showView(radio.value));
+    });
+
+    // dictionary search/filter
+    $('dictSearch').addEventListener('input', renderDictionary);
+    $('tagFilter').addEventListener('change', renderDictionary);
+
+    // add task
+    $('addTaskBtn').addEventListener('click', () => {
+      state.tasks.push({
+        id: Date.now(),
+        task: '',
+        wbs: '',
+        status: 'To Do',
+        priority: '',
+        due: '',
+        assigned: '',
+      });
+      renderTaskTable();
+    });
+
+    // file upload
+    $('fileUpload').addEventListener('change', (e) => {
+      Array.from(e.target.files).forEach((file) => {
+        const url = URL.createObjectURL(file);
+        state.files.push({ file, url });
+      });
+      renderFileTable();
+      e.target.value = '';
+    });
+
+    // report form
+    $('reportForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const r = {
+        date: new Date().toLocaleDateString(),
+        wbs: $('reportWBS').value,
+        status: $('reportStatus').value,
+        risks: $('reportRisks').value,
+        actions: $('reportActions').value,
+      };
+      state.reports.push(r);
+      renderReportTable();
+      e.target.reset();
+    });
+
+    // knowledge library
+    $('pageSelect').addEventListener('change', () => {
+      const title = $('pageSelect').value;
+      $('wikiEditor').value = title && title !== '__new__' ? state.pages[title] || '' : '';
+      renderWikiDisplay();
+    });
+
+    $('wikiEditor').addEventListener('input', renderWikiDisplay);
+
+    $('saveWiki').addEventListener('click', saveWikiPage);
+
+    // dark mode toggle
+    $('dark-toggle').addEventListener('click', toggleDarkMode);
+  }
+
+  function initialRender() {
+    renderHome();
+    buildTree($('wbsTree'), WBS_STRUCTURE);
+    populateTagFilter();
+    renderDictionary();
+    generateInitialTasks();
+    renderTaskTable();
+    renderFileTable();
+    populateReportWbs();
+    renderReportTable();
+    refreshPageSelect();
+  }
+
+  function init() {
+    bindEvents();
+    initialRender();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+ </body>
+</html>

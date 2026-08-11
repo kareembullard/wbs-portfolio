@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html data-color-scheme="light" lang="en">
+ <head>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Unified Workflow &amp; Strategic Initiatives – Portfolio Dashboard
+  </title>
+  <link href="style.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+  
+  
+  
+  
+ </head>
+ <body>
+  <!-- Header -->
+  <header class="header flex items-center px-16" id="header">
+   <h1 class="header__title">
+    Unified Workflow &amp; Strategic Initiatives
+   </h1>
+   <button aria-label="Toggle dark mode" class="btn btn--secondary" id="dark-toggle">
+    🌙
+   </button>
+  </header>
+  <!-- Sidebar Navigation -->
+  <nav aria-label="Main navigation" class="side-nav nav-bar" id="sidebar">
+   <form class="sidebar__form flex gap-8" id="navForm">
+    <label class="sidebar__radio">
+     <input checked="" name="view" type="radio" value="home"/>
+     Home / Project Wiki
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="wbs"/>
+     WBS Dashboard
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="dictionary"/>
+     WBS Dictionary
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="tasks"/>
+     Task Tracker
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="assets"/>
+     Asset Catalog
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="reporting"/>
+     Reporting Forms
+    </label>
+    <label class="sidebar__radio">
+     <input name="view" type="radio" value="knowledge"/>
+     Knowledge Library
+    </label>
+   </form>
+  </nav>
+  <!-- Main Content -->
+  <main class="main" id="main">
+   <!-- Home / Wiki View -->
+   <section class="view-section section-container" id="view-home">
+    <h2 class="section-title">
+     Project Overview
+    </h2>
+    <div class="card" id="homeContent">
+     <div class="card__body" id="homeBody">
+     </div>
+    </div>
+   </section>
+   <!-- WBS Dashboard -->
+   <section class="view-section section-container hidden" id="view-wbs">
+    <h2 class="section-title">
+     Work Breakdown Structure
+    </h2>
+    <div class="flex gap-16">
+     <div class="card" style="min-width:280px;flex:1;">
+      <div class="card__body">
+       <ul class="wbs-tree" id="wbsTree">
+       </ul>
+      </div>
+     </div>
+     <div class="card" style="flex:2;">
+      <div class="card__body" id="wbsDetail">
+       <p>
+        Select a WBS element to view its details.
+       </p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- WBS Dictionary -->
+   <section class="view-section section-container hidden" id="view-dictionary">
+    <h2 class="section-title">
+     WBS Dictionary
+    </h2>
+    <div class="flex gap-16 mb-8">
+     <input class="form-control" id="dictSearch" placeholder="Search element or description" style="flex:2;" type="text"/>
+     <select class="form-control" id="tagFilter" multiple="" style="flex:1;">
+     </select>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="dictTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Task Tracker -->
+   <section class="view-section section-container hidden" id="view-tasks">
+    <div class="flex items-center mb-8">
+     <h2 class="section-title">
+      Task Tracker
+     </h2>
+     <button class="btn btn--primary btn--sm" id="addTaskBtn">
+      Add Task
+     </button>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="taskTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Asset Catalog -->
+   <section class="view-section section-container hidden" id="view-assets">
+    <h2 class="section-title">
+     Asset Catalog
+    </h2>
+    <div class="flex gap-16 mb-8 items-center">
+     <input id="fileUpload" multiple="" type="file"/>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="fileTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Reporting Forms -->
+   <section class="view-section section-container hidden" id="view-reporting">
+    <h2 class="section-title">
+     Status Reporting
+    </h2>
+    <div class="card mb-16">
+     <div class="card__body">
+      <form class="flex gap-16" id="reportForm">
+       <div class="flex gap-16">
+        <div>
+         <label class="form-label" for="reportWBS">
+          WBS ID
+         </label>
+         <select class="form-control" id="reportWBS">
+         </select>
+        </div>
+        <div>
+         <label class="form-label" for="reportStatus">
+          Status Update
+         </label>
+         <textarea class="form-control" id="reportStatus" rows="3"></textarea>
+        </div>
+       </div>
+       <div class="flex gap-16">
+        <div>
+         <label class="form-label" for="reportRisks">
+          Risks
+         </label>
+         <textarea class="form-control" id="reportRisks" rows="3"></textarea>
+        </div>
+        <div>
+         <label class="form-label" for="reportActions">
+          Next Actions
+         </label>
+         <textarea class="form-control" id="reportActions" rows="3"></textarea>
+        </div>
+       </div>
+       <div class="flex">
+        <button class="btn btn--primary" type="submit">
+         Submit Report
+        </button>
+       </div>
+      </form>
+     </div>
+    </div>
+    <div class="card">
+     <div class="card__body">
+      <table class="table" id="reportTable">
+      </table>
+     </div>
+    </div>
+   </section>
+   <!-- Knowledge Library -->
+   <section class="view-section section-container hidden" id="view-knowledge">
+    <h2 class="section-title">
+     Knowledge Library
+    </h2>
+    <div class="flex gap-16 mb-8">
+     <select class="form-control" id="pageSelect" style="flex:1;">
+     </select>
+     <button class="btn btn--primary btn--sm" id="saveWiki">
+      Save
+     </button>
+    </div>
+    <textarea class="form-control mb-16" id="wikiEditor" placeholder="Write markdown here..." rows="8"></textarea>
+    <div class="card">
+     <div class="card__body" id="wikiDisplay">
+     </div>
+    </div>
+   </section>
+  </main>
+  <script src="app.js">
+  </script>
+ </body>
+</html>
