@@ -6,13 +6,9 @@ A comprehensive project portfolio management dashboard with a full WBS (Work Bre
 
 ## Live Demo
 
-**HTML Version (no install needed):**
-Open `Unified_Workflow_Strategic_Initiatives_Portfolio_Dashboard.html` directly in your browser — or deploy to GitHub Pages:
-```
-https://[your-github-username].github.io/wbs-portfolio/Unified_Workflow_Strategic_Initiatives_Portfolio_Dashboard.html
-```
+**Live:** [https://kareembullard.github.io/wbs-portfolio/](https://kareembullard.github.io/wbs-portfolio/)
 
-> A React/Vite version with TypeScript is also available in this folder for local development (see below).
+`index.html` (a copy of `Unified_Workflow_Strategic_Initiatives_Portfolio_Dashboard.html`) is served directly from GitHub Pages via relative-path `style.css`/`app.js` — no build step. A React/Vite version with TypeScript is also available in this folder for local development (see below).
 
 ## Features
 
