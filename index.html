@@ -91,6 +91,11 @@
   .edit-row .edit-field { flex: 1; min-width: 140px; }
   .edit-actions { display: flex; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
 
+  .checklist { max-height: 160px; overflow-y: auto; border: 1px solid var(--border); border-radius: var(--radius); padding: .5rem .6rem; background: var(--bg); }
+  .checklist-item { display: block; font-size: .85rem; padding: .15rem 0; cursor: pointer; }
+  .checklist-add-row { display: flex; gap: .4rem; margin-top: .5rem; }
+  .checklist-add-row input { flex: 1; padding: .3rem .5rem; font-size: .82rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--text); }
+
   ul.wbs, ul.wbs ul { list-style: none; margin: 0; padding: 0; }
   ul.wbs ul { margin: .35rem 0 .35rem .5rem; padding-left: .9rem; border-left: 1px solid var(--border); }
   .wbs-node { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .45rem .75rem; margin-bottom: .35rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
@@ -495,6 +500,57 @@ function getUniqueTags() {
   const set = new Set();
   Object.keys(state.dictionary).forEach(id => entryTags(id).forEach(t => set.add(t)));
   return Array.from(set).sort();
+}
+function entryPhases(wbsId) {
+  const d = state.dictionary[wbsId];
+  if (!d) return [];
+  return String(d["Phases"] || "").split(",").map(p => p.trim()).filter(Boolean);
+}
+function getUniquePhases() {
+  const set = new Set();
+  Object.keys(state.dictionary).forEach(id => entryPhases(id).forEach(p => set.add(p)));
+  return Array.from(set).sort();
+}
+// Scrollable checkbox list: `selected` is a Set of currently-checked values (mutated in place);
+// `extraInput` lets the user type a brand-new value not yet in the vocabulary.
+function checkboxList(values, selected) {
+  const wrap = document.createElement("div");
+  wrap.className = "checklist";
+  values.forEach(v => {
+    const label = document.createElement("label");
+    label.className = "checklist-item";
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = selected.has(v);
+    cb.addEventListener("change", () => { if (cb.checked) selected.add(v); else selected.delete(v); });
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(" " + v));
+    wrap.appendChild(label);
+  });
+  const addRow = document.createElement("div");
+  addRow.className = "checklist-add-row";
+  const addInput = document.createElement("input");
+  addInput.type = "text";
+  addInput.placeholder = "Add new…";
+  const addBtn = document.createElement("button");
+  addBtn.type = "button"; addBtn.className = "btn small"; addBtn.textContent = "Add";
+  addBtn.addEventListener("click", () => {
+    const v = addInput.value.trim();
+    if (!v || selected.has(v)) return;
+    selected.add(v);
+    addInput.value = "";
+    const label = document.createElement("label");
+    label.className = "checklist-item";
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.checked = true;
+    cb.addEventListener("change", () => { if (cb.checked) selected.add(v); else selected.delete(v); });
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(" " + v));
+    wrap.insertBefore(label, addRow);
+  });
+  addRow.appendChild(addInput); addRow.appendChild(addBtn);
+  wrap.appendChild(addRow);
+  return wrap;
 }
 function branchIds() { return state.structure.branches.map(b => b.id); }
 function branchLabel(b) { return b.id + " " + b.name; }
@@ -920,9 +976,12 @@ function openElementForm(id, backRoute) {
   const nameInput = textInput(draft.name);
   const descInput = textArea(draft.description, 3);
   const delivInput = textArea(draft.deliverables, 5);
-  const phasesInput = textInput(draft.phases);
   const timelineInput = textInput(draft.timeline);
-  const tagsInput = textInput(draft.tags);
+
+  const selectedPhases = new Set(String(draft.phases || "").split(",").map(p => p.trim()).filter(Boolean));
+  const selectedTags = new Set(String(draft.tags || "").split(",").map(t => t.trim()).filter(Boolean));
+  const phasesChecklist = checkboxList(getUniquePhases(), selectedPhases);
+  const tagsChecklist = checkboxList(getUniqueTags(), selectedTags);
 
   const row1 = document.createElement("div"); row1.className = "edit-row";
   row1.appendChild(field("Branch", branchSelect));
@@ -930,11 +989,11 @@ function openElementForm(id, backRoute) {
   panel.appendChild(row1);
   panel.appendChild(field("Description", descInput));
   panel.appendChild(field("Deliverables (one per line)", delivInput));
+  panel.appendChild(field("Timeline", timelineInput));
   const row2 = document.createElement("div"); row2.className = "edit-row";
-  row2.appendChild(field("Phases", phasesInput));
-  row2.appendChild(field("Timeline", timelineInput));
+  row2.appendChild(field("Phases", phasesChecklist));
+  row2.appendChild(field("Tags/Notes", tagsChecklist));
   panel.appendChild(row2);
-  panel.appendChild(field("Tags/Notes (comma separated)", tagsInput));
 
   const actions = document.createElement("div"); actions.className = "edit-actions";
   const saveBtn = document.createElement("button"); saveBtn.className = "btn primary"; saveBtn.textContent = "Save";
@@ -962,9 +1021,9 @@ function openElementForm(id, backRoute) {
       "Element": name,
       "Description": descInput.value.trim(),
       "Deliverables": delivInput.value,
-      "Phases": phasesInput.value.trim(),
+      "Phases": [...selectedPhases].join(", "),
       "Timeline": timelineInput.value.trim(),
-      "Tags/Notes": tagsInput.value.trim(),
+      "Tags/Notes": [...selectedTags].join(", "),
     };
     saveState(); goRoute(back); render();
   });
@@ -1059,16 +1118,33 @@ function taskRow(t, redraw) {
   li.appendChild(left);
 
   const actions = document.createElement("div"); actions.className = "actions";
-  const advBtn = document.createElement("button");
-  advBtn.className = "btn small";
-  advBtn.textContent = t.status === "Done" ? "Reopen" : "Advance";
-  advBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const i = STATUSES.indexOf(t.status);
-    t.status = t.status === "Done" ? "To Do" : STATUSES[Math.min(i + 1, STATUSES.length - 1)];
+
+  const doneCheck = document.createElement("input");
+  doneCheck.type = "checkbox";
+  doneCheck.title = "Mark done";
+  doneCheck.checked = t.status === "Done";
+  doneCheck.addEventListener("click", (e) => e.stopPropagation());
+  doneCheck.addEventListener("change", () => {
+    t.status = doneCheck.checked ? "Done" : "To Do";
     saveState(); if (redraw) redraw(); else render();
   });
-  actions.appendChild(advBtn);
+  actions.appendChild(doneCheck);
+
+  const statusSelect = document.createElement("select");
+  statusSelect.style.width = "auto";
+  STATUSES.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s; opt.textContent = s;
+    if (s === t.status) opt.selected = true;
+    statusSelect.appendChild(opt);
+  });
+  statusSelect.addEventListener("click", (e) => e.stopPropagation());
+  statusSelect.addEventListener("change", () => {
+    t.status = statusSelect.value;
+    saveState(); if (redraw) redraw(); else render();
+  });
+  actions.appendChild(statusSelect);
+
   li.appendChild(actions);
   return li;
 }
