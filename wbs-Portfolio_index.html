@@ -502,7 +502,7 @@ function parseMarkdown(md) {
 const app = document.getElementById("app");
 const topNav = document.getElementById("top-nav");
 
-function goRoute(route) { location.hash = "#/" + route; }
+function goRoute(route) { const h = "#/" + route; if (location.hash === h) render(); else location.hash = h; }
 
 function tag(text, cls) { return '<span class="tag ' + (cls || "") + '">' + esc(text) + "</span>"; }
 function statusClass(s) { return "st-" + String(s || "").toLowerCase().replace(/\s+/g, "-"); }
