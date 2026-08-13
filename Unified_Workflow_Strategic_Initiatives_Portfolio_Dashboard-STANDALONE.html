@@ -63,7 +63,8 @@
   .filter-toolbar-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-bottom: .8rem; }
 
   ul.entities { list-style: none; margin: 0; padding: 0; }
-  li.entity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .65rem .9rem; margin-bottom: .5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .4rem; }
+  li.entity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .65rem .9rem; margin-bottom: .5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .4rem; cursor: pointer; }
+  li.entity:hover { border-color: var(--accent); }
   li.entity .main { font-weight: 600; font-size: .92rem; }
   li.entity .meta { font-size: .78rem; color: var(--text-dim); }
   li.entity .actions { display: flex; gap: .4rem; flex-shrink: 0; }
@@ -97,6 +98,8 @@
   .wbs-node.root > .label, .wbs-node.branch > .label { font-weight: 700; }
   .wbs-node.branch { background: var(--bg); }
   .wbs-node .toggle { cursor: pointer; }
+  .wbs-node.leaf { cursor: pointer; }
+  .wbs-node.leaf:hover { border-color: var(--accent); }
   .wbs-detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .7rem .9rem; margin: 0 0 .5rem .5rem; font-size: .85rem; }
   .kv { margin-bottom: .45rem; }
   .kv .k { font-size: .72rem; text-transform: uppercase; letter-spacing: .02em; color: var(--text-dim); display: block; }
@@ -762,6 +765,7 @@ function renderWbs() {
     b.elements.forEach(el => {
       const eLi = document.createElement("li");
       const node = document.createElement("div"); node.className = "wbs-node leaf";
+      node.addEventListener("click", () => openElementForm(el.id, "wbs"));
       const label = document.createElement("span"); label.className = "label";
       label.innerHTML = tag(el.id, "wbs");
       const nameSpan = document.createElement("span");
@@ -773,10 +777,7 @@ function renderWbs() {
       const toggleBtn = document.createElement("button");
       toggleBtn.className = "btn small";
       toggleBtn.textContent = wbsOpen[el.id] ? "Hide details" : "Details";
-      const editBtn = document.createElement("button");
-      editBtn.className = "btn small"; editBtn.textContent = "Edit";
-      editBtn.addEventListener("click", () => openElementForm(el.id, "wbs"));
-      actions.appendChild(toggleBtn); actions.appendChild(editBtn);
+      actions.appendChild(toggleBtn);
       node.appendChild(actions);
       eLi.appendChild(node);
 
@@ -785,7 +786,8 @@ function renderWbs() {
       fillDetail(detail, el.id);
       eLi.appendChild(detail);
 
-      toggleBtn.addEventListener("click", () => {
+      toggleBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
         wbsOpen[el.id] = !wbsOpen[el.id];
         detail.style.display = wbsOpen[el.id] ? "block" : "none";
         toggleBtn.textContent = wbsOpen[el.id] ? "Hide details" : "Details";
@@ -876,6 +878,7 @@ function renderDictionary() {
 function dictRow(id) {
   const d = state.dictionary[id];
   const li = document.createElement("li"); li.className = "entity";
+  li.addEventListener("click", () => openElementForm(id, "dictionary"));
   const left = document.createElement("div");
   left.style.flex = "1"; left.style.minWidth = "200px";
   left.innerHTML = '<div class="main"></div><div class="meta"></div>';
@@ -887,12 +890,6 @@ function dictRow(id) {
   tagWrap.innerHTML = entryTags(id).map(t => tag(t)).join("");
   left.appendChild(tagWrap);
   li.appendChild(left);
-  const actions = document.createElement("div"); actions.className = "actions";
-  const editBtn = document.createElement("button");
-  editBtn.className = "btn small"; editBtn.textContent = "Edit";
-  editBtn.addEventListener("click", () => openElementForm(id, "dictionary"));
-  actions.appendChild(editBtn);
-  li.appendChild(actions);
   return li;
 }
 
@@ -1046,6 +1043,7 @@ function filteredTasks(q) {
 
 function taskRow(t, redraw) {
   const li = document.createElement("li"); li.className = "entity";
+  li.addEventListener("click", () => openTaskForm(t.id));
   const left = document.createElement("div");
   left.style.flex = "1"; left.style.minWidth = "200px";
   left.innerHTML = '<div class="main"></div><div class="meta"></div>';
@@ -1064,15 +1062,13 @@ function taskRow(t, redraw) {
   const advBtn = document.createElement("button");
   advBtn.className = "btn small";
   advBtn.textContent = t.status === "Done" ? "Reopen" : "Advance";
-  advBtn.addEventListener("click", () => {
+  advBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
     const i = STATUSES.indexOf(t.status);
     t.status = t.status === "Done" ? "To Do" : STATUSES[Math.min(i + 1, STATUSES.length - 1)];
     saveState(); if (redraw) redraw(); else render();
   });
-  const editBtn = document.createElement("button");
-  editBtn.className = "btn small"; editBtn.textContent = "Edit";
-  editBtn.addEventListener("click", () => openTaskForm(t.id));
-  actions.appendChild(advBtn); actions.appendChild(editBtn);
+  actions.appendChild(advBtn);
   li.appendChild(actions);
   return li;
 }
@@ -1158,6 +1154,7 @@ function renderReports() {
   if (!state.reports.length) app.appendChild(emptyMsg("No status reports yet — add one to record progress, risks, and next actions."));
   state.reports.slice().reverse().forEach(r => {
     const li = document.createElement("li"); li.className = "entity";
+    li.addEventListener("click", () => openReportForm(r.id));
     const left = document.createElement("div");
     left.style.flex = "1"; left.style.minWidth = "200px";
     left.innerHTML = '<div class="main"></div><div class="meta"></div>';
@@ -1168,12 +1165,6 @@ function renderReports() {
     if (r.risks) left.appendChild(kv("Risks", r.risks));
     if (r.actions) left.appendChild(kv("Next Actions", r.actions));
     li.appendChild(left);
-    const actions = document.createElement("div"); actions.className = "actions";
-    const editBtn = document.createElement("button");
-    editBtn.className = "btn small"; editBtn.textContent = "Edit";
-    editBtn.addEventListener("click", () => openReportForm(r.id));
-    actions.appendChild(editBtn);
-    li.appendChild(actions);
     ul.appendChild(li);
   });
 }
@@ -1254,6 +1245,7 @@ function renderAssets() {
   if (!state.assets.length) app.appendChild(emptyMsg("No assets catalogued yet."));
   state.assets.forEach(a => {
     const li = document.createElement("li"); li.className = "entity";
+    li.addEventListener("click", () => openAssetForm(a.id));
     const left = document.createElement("div");
     left.style.flex = "1"; left.style.minWidth = "200px";
     left.innerHTML = '<div class="main"></div><div class="meta"></div>';
@@ -1263,12 +1255,6 @@ function renderAssets() {
     if (a.type) left.querySelector(".main").insertAdjacentHTML("beforeend", tag(a.type));
     left.querySelector(".meta").textContent = [a.location, a.notes].filter(Boolean).join(" · ") || "—";
     li.appendChild(left);
-    const actions = document.createElement("div"); actions.className = "actions";
-    const editBtn = document.createElement("button");
-    editBtn.className = "btn small"; editBtn.textContent = "Edit";
-    editBtn.addEventListener("click", () => openAssetForm(a.id));
-    actions.appendChild(editBtn);
-    li.appendChild(actions);
     ul.appendChild(li);
   });
 }
@@ -1349,6 +1335,7 @@ function renderLibrary() {
   app.appendChild(ul);
   titles.forEach(t => {
     const li = document.createElement("li"); li.className = "entity";
+    li.addEventListener("click", () => openPageForm(t));
     const left = document.createElement("div");
     left.style.flex = "1"; left.style.minWidth = "200px";
     left.innerHTML = '<div class="main"></div><div class="meta"></div>';
@@ -1356,12 +1343,6 @@ function renderLibrary() {
     const words = String(state.pages[t] || "").split(/\s+/).filter(Boolean).length;
     left.querySelector(".meta").textContent = words + " words";
     li.appendChild(left);
-    const actions = document.createElement("div"); actions.className = "actions";
-    const editBtn = document.createElement("button");
-    editBtn.className = "btn small"; editBtn.textContent = "Open / Edit";
-    editBtn.addEventListener("click", () => openPageForm(t));
-    actions.appendChild(editBtn);
-    li.appendChild(actions);
     ul.appendChild(li);
   });
 
