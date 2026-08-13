@@ -1,21 +1,115 @@
 <!DOCTYPE html>
-<html data-color-scheme="light" lang="en">
- <head>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-  <meta charset="utf-8"/>
-  <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>
-   Unified Workflow &amp; Strategic Initiatives – Portfolio Dashboard
-  </title>
-  <link href="style.css" rel="stylesheet"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-  
-  
-  
-  
- </head>
- <body>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WBS Portfolio</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="WBS Portfolio — a work breakdown structure with dictionary, task tracker, status reports, asset catalog, and knowledge library. Single-file demo web app.">
+<style>
+  :root {
+    --bg: #f7f8fa; --surface: #ffffff; --border: #e2e5ea; --text: #1a1d23; --text-dim: #6b7280;
+    --accent: #2563eb; --accent-dim: #dbeafe; --radius: 10px;
+    --ok: #16a34a; --ok-dim: #dcfce7; --warn: #d97706; --warn-dim: #fef3c7; --bad: #dc2626; --bad-dim: #fee2e2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #0f1115; --surface: #181b21; --border: #2a2e37; --text: #e5e7eb; --text-dim: #9aa1ad; --accent: #60a5fa; --accent-dim: #1e3a5f; --ok: #4ade80; --ok-dim: #14361f; --warn: #fbbf24; --warn-dim: #3a2c0d; --bad: #f87171; --bad-dim: #3a1414; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+  h1 { font-size: 1.5rem; margin: 0 0 .25rem; }
+  .sub { color: var(--text-dim); font-size: .92rem; margin: 0 0 1rem; }
+  .privacy-note { font-size: .78rem; color: var(--text-dim); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .6rem .8rem; margin-bottom: 1.25rem; }
+
+  nav.top { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: .8rem; flex-wrap: wrap; }
+  nav.top a { color: var(--text-dim); text-decoration: none; font-size: .88rem; cursor: pointer; }
+  nav.top a.active, nav.top a:hover { color: var(--accent); }
+
+  input[type=search], input[type=text], input[type=number], input[type=date], input[type=url], select, textarea {
+    width: 100%; padding: .5rem .7rem; border: 1px solid var(--border); border-radius: var(--radius);
+    background: var(--surface); color: var(--text); font-size: .9rem; font-family: inherit;
+  }
+  textarea { resize: vertical; }
+
+  .btn { padding: .35rem .8rem; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: .8rem; cursor: pointer; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn.primary { background: var(--accent); color: #fff; border-color: transparent; font-weight: 600; }
+  .btn.primary:hover { color: #fff; filter: brightness(1.08); }
+  .btn.danger:hover { border-color: var(--bad); color: var(--bad); }
+  .btn.small { padding: .2rem .5rem; font-size: .74rem; }
+
+  .edit-toolbar { display: flex; align-items: center; gap: .6rem; flex-wrap: wrap; font-size: .8rem; color: var(--text-dim); margin-bottom: 1rem; }
+
+  .tag { display: inline-block; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; padding: .1rem .55rem; font-size: .74rem; color: var(--text-dim); margin-left: .35rem; }
+  .tag.pri-high { background: var(--bad-dim); color: var(--bad); border-color: transparent; }
+  .tag.pri-medium { background: var(--warn-dim); color: var(--warn); border-color: transparent; }
+  .tag.pri-low { background: var(--ok-dim); color: var(--ok); border-color: transparent; }
+  .tag.st-done { background: var(--ok-dim); color: var(--ok); border-color: transparent; }
+  .tag.st-in-progress { background: var(--accent-dim); color: var(--accent); border-color: transparent; }
+  .tag.st-to-do { background: var(--bg); color: var(--text-dim); }
+  .tag.wbs { background: var(--accent-dim); color: var(--accent); border-color: transparent; font-weight: 600; margin-left: 0; margin-right: .35rem; }
+  .count { color: var(--text-dim); font-weight: 400; font-size: .85rem; }
+  .empty { color: var(--text-dim); font-style: italic; font-size: .88rem; padding: .3rem 0; }
+  footer { margin-top: 2.5rem; text-align: center; font-size: .78rem; color: var(--text-dim); }
+  footer a { color: var(--text-dim); }
+
+  .filter-bar { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: .8rem; }
+  .filter-group { min-width: 160px; }
+  .fg-label { display: block; font-size: .74rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .02em; margin-bottom: .3rem; }
+  .pill-scroll { display: flex; flex-wrap: wrap; gap: .35rem; max-height: 8.5rem; overflow-y: auto; }
+  .pill { border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); border-radius: 999px; padding: .2rem .65rem; font-size: .78rem; cursor: pointer; }
+  .pill.active { background: var(--accent-dim); color: var(--accent); border-color: transparent; font-weight: 600; }
+  .filter-toolbar-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem; margin-bottom: .8rem; }
+
+  ul.entities { list-style: none; margin: 0; padding: 0; }
+  li.entity { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .65rem .9rem; margin-bottom: .5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .4rem; }
+  li.entity .main { font-weight: 600; font-size: .92rem; }
+  li.entity .meta { font-size: .78rem; color: var(--text-dim); }
+  li.entity .actions { display: flex; gap: .4rem; flex-shrink: 0; }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; margin-bottom: 1.5rem; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .9rem 1rem; }
+  .stat-card .num { font-size: 1.5rem; font-weight: 700; }
+  .stat-card .label { font-size: .78rem; color: var(--text-dim); }
+
+  .section { margin-top: 1.5rem; }
+  .section h2 { font-size: 1.02rem; border-bottom: 2px solid var(--border); padding-bottom: .35rem; margin-bottom: .6rem; }
+
+  .bar-row { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; font-size: .82rem; }
+  .bar-row .bar-label { width: 190px; flex-shrink: 0; color: var(--text-dim); }
+  .bar-track { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 999px; height: 14px; overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); border-radius: 999px; }
+  .bar-fill.over { background: var(--bad); }
+  .bar-row .bar-val { width: 80px; text-align: right; flex-shrink: 0; color: var(--text-dim); }
+
+  .edit-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem; margin-top: 1rem; }
+  .edit-field { margin-bottom: .9rem; }
+  .edit-field label { display: block; font-size: .78rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .02em; margin-bottom: .3rem; }
+  .edit-row { display: flex; gap: .6rem; flex-wrap: wrap; }
+  .edit-row .edit-field { flex: 1; min-width: 140px; }
+  .edit-actions { display: flex; gap: .6rem; margin-top: 1rem; flex-wrap: wrap; }
+
+  ul.wbs, ul.wbs ul { list-style: none; margin: 0; padding: 0; }
+  ul.wbs ul { margin: .35rem 0 .35rem .5rem; padding-left: .9rem; border-left: 1px solid var(--border); }
+  .wbs-node { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .45rem .75rem; margin-bottom: .35rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; flex-wrap: wrap; }
+  .wbs-node .label { font-size: .88rem; }
+  .wbs-node.root > .label, .wbs-node.branch > .label { font-weight: 700; }
+  .wbs-node.branch { background: var(--bg); }
+  .wbs-node .toggle { cursor: pointer; }
+  .wbs-detail { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: .7rem .9rem; margin: 0 0 .5rem .5rem; font-size: .85rem; }
+  .kv { margin-bottom: .45rem; }
+  .kv .k { font-size: .72rem; text-transform: uppercase; letter-spacing: .02em; color: var(--text-dim); display: block; }
+  .kv .v { white-space: pre-wrap; }
+
+  .md h1 { font-size: 1.25rem; margin: .6rem 0 .3rem; }
+  .md h2 { font-size: 1.05rem; margin: .6rem 0 .3rem; border: 0; padding: 0; }
+  .md h3 { font-size: .95rem; margin: .5rem 0 .25rem; }
+  .md p { margin: .35rem 0; font-size: .9rem; }
+  .md ul { margin: .35rem 0; padding-left: 1.2rem; font-size: .9rem; }
+  .md code { background: var(--bg); border: 1px solid var(--border); border-radius: 4px; padding: 0 .25rem; font-size: .85em; }
+</style>
+</head>
+<body>
 <div id="kb-app-nav" style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.5rem 1rem;background:#181b21;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;border-bottom:1px solid #2a2e37;position:relative;z-index:99999;box-sizing:border-box;">
   <a href="https://kareembullard.github.io/" style="color:#e5e7eb;text-decoration:none;font-weight:600;white-space:nowrap;">🏠 Home</a>
   <div style="position:relative;">
@@ -26,6 +120,11 @@
 </div>
 <script>
 (function () {
+  if (window.self !== window.top) {
+    var framedBar = document.getElementById("kb-app-nav");
+    if (framedBar) framedBar.style.display = "none";
+    return;
+  }
   var KB_APPS = [
     { group: "Personal Systems Suite", name: "Systems Catalog Explorer", repo: "systems-catalog-explorer-web" },
     { group: "Personal Systems Suite", name: "Tool Inventory Browser", repo: "tool-inventory-browser-web" },
@@ -89,202 +188,1206 @@
 })();
 </script>
 
-  <!-- Header -->
-  <header class="header flex items-center px-16" id="header">
-   <h1 class="header__title">
-    Unified Workflow &amp; Strategic Initiatives
-   </h1>
-   <button aria-label="Toggle dark mode" class="btn btn--secondary" id="dark-toggle">
-    🌙
-   </button>
-  </header>
-  <!-- Sidebar Navigation -->
-  <nav aria-label="Main navigation" class="side-nav nav-bar" id="sidebar">
-   <form class="sidebar__form flex gap-8" id="navForm">
-    <label class="sidebar__radio">
-     <input checked="" name="view" type="radio" value="home"/>
-     Home / Project Wiki
-    </label>
-    <label class="sidebar__radio">
-     <input name="view" type="radio" value="wbs"/>
-     WBS Dashboard
-    </label>
-    <label class="sidebar__radio">
-     <input name="view" type="radio" value="dictionary"/>
-     WBS Dictionary
-    </label>
-    <label class="sidebar__radio">
-     <input name="view" type="radio" value="tasks"/>
-     Task Tracker
-    </label>
-    <label class="sidebar__radio">
-     <input name="view" type="radio" value="assets"/>
-     Asset Catalog
-    </label>
-    <label class="sidebar__radio">
-     <input name="view" type="radio" value="reporting"/>
-     Reporting Forms
-    </label>
-    <label class="sidebar__radio">
-     <input name="view" type="radio" value="knowledge"/>
-     Knowledge Library
-    </label>
-   </form>
+<div class="wrap">
+  <h1>🗂️ WBS Portfolio</h1>
+  <p class="sub">A work breakdown structure for a real personal program — dictionary, task tracker, status reports, asset catalog, and knowledge library.</p>
+  <div class="privacy-note">This is a portfolio demo built from a real WBS. Everything is editable — add/edit/delete WBS elements, tasks, reports, assets, and library pages. Edits save to <em>your</em> browser only (<code>localStorage</code>); nothing is ever sent to a server. Use Reset to restore the original seed data.</div>
+
+  <div class="edit-toolbar" id="edit-toolbar"></div>
+
+  <nav class="top" id="top-nav">
+    <a data-route="overview">Overview</a>
+    <a data-route="wbs">WBS</a>
+    <a data-route="dictionary">Dictionary</a>
+    <a data-route="tasks">Tasks</a>
+    <a data-route="reports">Reports</a>
+    <a data-route="assets">Assets</a>
+    <a data-route="library">Library</a>
   </nav>
-  <!-- Main Content -->
-  <main class="main" id="main">
-   <!-- Home / Wiki View -->
-   <section class="view-section section-container" id="view-home">
-    <h2 class="section-title">
-     Project Overview
-    </h2>
-    <div class="card" id="homeContent">
-     <div class="card__body" id="homeBody">
-     </div>
-    </div>
-   </section>
-   <!-- WBS Dashboard -->
-   <section class="view-section section-container hidden" id="view-wbs">
-    <h2 class="section-title">
-     Work Breakdown Structure
-    </h2>
-    <div class="flex gap-16">
-     <div class="card" style="min-width:280px;flex:1;">
-      <div class="card__body">
-       <ul class="wbs-tree" id="wbsTree">
-       </ul>
-      </div>
-     </div>
-     <div class="card" style="flex:2;">
-      <div class="card__body" id="wbsDetail">
-       <p>
-        Select a WBS element to view its details.
-       </p>
-      </div>
-     </div>
-    </div>
-   </section>
-   <!-- WBS Dictionary -->
-   <section class="view-section section-container hidden" id="view-dictionary">
-    <h2 class="section-title">
-     WBS Dictionary
-    </h2>
-    <div class="flex gap-16 mb-8">
-     <input class="form-control" id="dictSearch" placeholder="Search element or description" style="flex:2;" type="text"/>
-     <select class="form-control" id="tagFilter" multiple="" style="flex:1;">
-     </select>
-    </div>
-    <div class="card">
-     <div class="card__body">
-      <table class="table" id="dictTable">
-      </table>
-     </div>
-    </div>
-   </section>
-   <!-- Task Tracker -->
-   <section class="view-section section-container hidden" id="view-tasks">
-    <div class="flex items-center mb-8">
-     <h2 class="section-title">
-      Task Tracker
-     </h2>
-     <button class="btn btn--primary btn--sm" id="addTaskBtn">
-      Add Task
-     </button>
-    </div>
-    <div class="card">
-     <div class="card__body">
-      <table class="table" id="taskTable">
-      </table>
-     </div>
-    </div>
-   </section>
-   <!-- Asset Catalog -->
-   <section class="view-section section-container hidden" id="view-assets">
-    <h2 class="section-title">
-     Asset Catalog
-    </h2>
-    <div class="flex gap-16 mb-8 items-center">
-     <input id="fileUpload" multiple="" type="file"/>
-    </div>
-    <div class="card">
-     <div class="card__body">
-      <table class="table" id="fileTable">
-      </table>
-     </div>
-    </div>
-   </section>
-   <!-- Reporting Forms -->
-   <section class="view-section section-container hidden" id="view-reporting">
-    <h2 class="section-title">
-     Status Reporting
-    </h2>
-    <div class="card mb-16">
-     <div class="card__body">
-      <form class="flex gap-16" id="reportForm">
-       <div class="flex gap-16">
-        <div>
-         <label class="form-label" for="reportWBS">
-          WBS ID
-         </label>
-         <select class="form-control" id="reportWBS">
-         </select>
-        </div>
-        <div>
-         <label class="form-label" for="reportStatus">
-          Status Update
-         </label>
-         <textarea class="form-control" id="reportStatus" rows="3"></textarea>
-        </div>
-       </div>
-       <div class="flex gap-16">
-        <div>
-         <label class="form-label" for="reportRisks">
-          Risks
-         </label>
-         <textarea class="form-control" id="reportRisks" rows="3"></textarea>
-        </div>
-        <div>
-         <label class="form-label" for="reportActions">
-          Next Actions
-         </label>
-         <textarea class="form-control" id="reportActions" rows="3"></textarea>
-        </div>
-       </div>
-       <div class="flex">
-        <button class="btn btn--primary" type="submit">
-         Submit Report
-        </button>
-       </div>
-      </form>
-     </div>
-    </div>
-    <div class="card">
-     <div class="card__body">
-      <table class="table" id="reportTable">
-      </table>
-     </div>
-    </div>
-   </section>
-   <!-- Knowledge Library -->
-   <section class="view-section section-container hidden" id="view-knowledge">
-    <h2 class="section-title">
-     Knowledge Library
-    </h2>
-    <div class="flex gap-16 mb-8">
-     <select class="form-control" id="pageSelect" style="flex:1;">
-     </select>
-     <button class="btn btn--primary btn--sm" id="saveWiki">
-      Save
-     </button>
-    </div>
-    <textarea class="form-control mb-16" id="wikiEditor" placeholder="Write markdown here..." rows="8"></textarea>
-    <div class="card">
-     <div class="card__body" id="wikiDisplay">
-     </div>
-    </div>
-   </section>
-  </main>
-  <script src="app.js">
-  </script>
- </body>
+
+  <div id="app"></div>
+
+  <footer>
+    Part of <a href="https://kareembullard.github.io/">Kareem Bullard's app portfolio</a>. Source: <a href="https://github.com/kareembullard/wbs-portfolio" target="_blank" rel="noopener">wbs-portfolio</a>.
+  </footer>
+</div>
+
+<script>
+const STORAGE_KEY = "wbs-portfolio:data";
+const STATUSES = ["To Do", "In Progress", "Done"];
+const PRIORITIES = ["High", "Medium", "Low"];
+
+const OVERVIEW_MD = "# Unified Workflow & Strategic Initiatives\n\nThe Work Breakdown Structure (WBS) organizes all program work into manageable sections. Browse the dashboard to explore details, tasks, assets, reports and knowledge.\n\n**Sponsor:** Kareem Bullard";
+
+const SEED_STRUCTURE = {
+  root: "1.0 Unified Workflow and Strategic Initiatives",
+  branches: [
+    { id: "1.1", name: "Business Initiatives", elements: [
+      { id: "1.1.1", name: "Gem Droppers Content Creation and Sharing Initiative (GDCCSI)" },
+      { id: "1.1.2", name: "Sales - $5,000 Digital Products by July 1, 2025" },
+      { id: "1.1.3", name: "Get in the Cannon Project" },
+      { id: "1.1.4", name: "Networking Client Acquisition" },
+      { id: "1.1.5", name: "Freelance Prospecting" },
+    ] },
+    { id: "1.2", name: "Personal Development & Well-being", elements: [
+      { id: "1.2.1", name: "Memoir Writing" },
+      { id: "1.2.2", name: "Creative Resurgence Epic" },
+      { id: "1.2.3", name: "Professional Certifications Renewal" },
+      { id: "1.2.4", name: "Health & Diet Management" },
+      { id: "1.2.5", name: "Leisure & Entertainment" },
+      { id: "1.2.6", name: "K2L Project" },
+    ] },
+    { id: "1.3", name: "System Development & Maintenance", elements: [
+      { id: "1.3.1", name: "Airtable Multi-Layered Productivity System Setup" },
+      { id: "1.3.2", name: "Custom Productivity Apps Development" },
+      { id: "1.3.3", name: "Suno Export & Music Management (Suno-EXP-2025)" },
+      { id: "1.3.4", name: "Automation Bot Development" },
+      { id: "1.3.5", name: "Knowledge Management Tool Optimization" },
+    ] },
+    { id: "1.4", name: "Financial Management", elements: [
+      { id: "1.4.1", name: "Bankruptcy Process (CH7-BK-2025)" },
+      { id: "1.4.2", name: "Budget & Financial Control" },
+    ] },
+  ],
+};
+
+const SEED_DICTIONARY = {
+  "1.1.1": {
+    "Element": "Gem Droppers Content Creation and Sharing Initiative (GDCCSI)",
+    "Description": "High-value project focused on content creation and sharing, involving ebook development, holiday posts, and exploring Substack as an outlet.",
+    "Deliverables": "- First Ebook (CFE-2025 Project)\n- Finalized ebook task lists\n- Holiday posts collection\n- Launched website webstore",
+    "Phases": "Network, Conduct",
+    "Timeline": "Ebook task lists finalized by June 31, 2025",
+    "Tags/Notes": "ProductionArea, High-Value, Active"
+  },
+  "1.1.2": {
+    "Element": "Sales - $5,000 Digital Products by July 1, 2025",
+    "Description": "Direct sales objective to achieve specific revenue target from digital products.",
+    "Deliverables": "$5,000 worth of digital products sold with measurable sales tracking.",
+    "Phases": "Conduct, Control, Market",
+    "Timeline": "Goal date: July 1, 2025 (8-hour estimated duration)",
+    "Tags/Notes": "BusinessP, Maintain, Sale, Prjttask, Blocked"
+  },
+  "1.1.3": {
+    "Element": "Get in the Cannon Project",
+    "Description": "Ongoing daily recurring business-oriented project implying consistent market-related activities.",
+    "Deliverables": "Consistent market outreach and business growth outcomes.",
+    "Phases": "Market, Conduct",
+    "Timeline": "Starts July 24, 2025; repeats every two days, skipping weekends (8 hours)",
+    "Tags/Notes": "BusinessP, MVP, Started, Execute, Must"
+  },
+  "1.1.4": {
+    "Element": "Networking Client Acquisition",
+    "Description": "Ongoing activities focused on building connections and acquiring clients.",
+    "Deliverables": "Client leads, professional connections, expanded network.",
+    "Phases": "Conduct, Network",
+    "Timeline": "Starts July 24, 2025; repeats every two days (8 hours). Associated with Q1, Q2 planning.",
+    "Tags/Notes": "BusinessArea, CareerArea, Must"
+  },
+  "1.1.5": {
+    "Element": "Freelance Prospecting",
+    "Description": "Activities aimed at finding and applying for freelance jobs/gigs.",
+    "Deliverables": "- Prospect Apply to 5 Jobs\n- Prospect Apply for 5 Gigs\n- Review Prospects\n- Job tracker links",
+    "Phases": "Prospect, Scope, Research, Network",
+    "Timeline": "Starts July 24, 2025; repeats every two days, skipping weekends (8 hours)",
+    "Tags/Notes": "K2L, MVP, Objective, Must"
+  },
+  "1.2.1": {
+    "Element": "Memoir Writing",
+    "Description": "Ongoing project focused on writing memoir, including reminiscing memories and setting up voice input app.",
+    "Deliverables": "- Memoir content from reminiscing memories\n- Setup of memoir app for voice input\n- Branch Off Moments system",
+    "Phases": "Document, Develop, Review",
+    "Timeline": "Starts July 24, 2025; repeats every three days (8 hours). Sub-task started June 27, 2025",
+    "Tags/Notes": "Life, PersonalArea, PersonalF, Write, Operation"
+  },
+  "1.2.2": {
+    "Element": "Creative Resurgence Epic",
+    "Description": "Ongoing project focused on creative output and artistic development.",
+    "Deliverables": "Creative works and progress in creative endeavors.",
+    "Phases": "Conduct, LeisureEntertainment",
+    "Timeline": "Starts July 24, 2025; repeats weekly on Saturdays and Sundays (8 hours each)",
+    "Tags/Notes": "ProductionArea, Recreation, Project, Active, Execute"
+  },
+  "1.2.3": {
+    "Element": "Professional Certifications Renewal",
+    "Description": "Proactive management of professional certifications including learning and execution for renewal.",
+    "Deliverables": "- Completed CompTIA A+ certification\n- Completed CompTIA Security+ certification",
+    "Phases": "Conduct, Educate, Research",
+    "Timeline": "Both certifications due February 1, 2026",
+    "Tags/Notes": "Blocked, Learn, EducationArea, Must, One Year to Go!"
+  },
+  "1.2.4": {
+    "Element": "Health & Diet Management",
+    "Description": "Activities focused on maintaining and improving personal health and dietary habits.",
+    "Deliverables": "- Meal prep (veggies)\n- Adherence to specific diets (juice, vegetarian)\n- Improved health monitoring",
+    "Phases": "Setup, Research, Resource, Control, Review, Ideate",
+    "Timeline": "Meal Prep repeats weekly on Sundays. Juice Diet due August 2, 2025",
+    "Tags/Notes": "HealthF, Health, Personal, PersonalF, Must, Should"
+  },
+  "1.3.1": {
+    "Element": "Airtable Multi-Layered Productivity System Setup",
+    "Description": "Major project to transform Airtable base into dynamic, automated productivity engine with five internal phases.",
+    "Deliverables": "- Functional, automated Airtable system\n- Four-table structure (Tasks, Days, Weeks, Months)\n- Key fields and date formulas\n- Automated record generation\n- Progress dashboard with rollup fields",
+    "Phases": "Setup. Internal phases: Foundation, Weaving, Autopilot, Dashboard, Advanced",
+    "Timeline": "Task entry date: July 24, 2025",
+    "Tags/Notes": "Active, Airtable"
+  },
+  "1.3.2": {
+    "Element": "Custom Productivity Apps Development",
+    "Description": "Initiative to build custom productivity applications, including customized Routinery App.",
+    "Deliverables": "- New applications or customized Routinery App\n- Interactive mindmaps\n- Flow charts for decisions\n- APK applications",
+    "Phases": "Develop, Setup",
+    "Timeline": "25-minute estimate for development tasks",
+    "Tags/Notes": "Produce, Build, AppDev, Task"
+  },
+  "1.3.3": {
+    "Element": "Suno Export & Music Management (Suno-EXP-2025)",
+    "Description": "Comprehensive management of music creations from Suno platform, including organizing, processing, producing, editing, and sharing.",
+    "Deliverables": "- Organized, edited Suno music creations\n- Suno data scraping tool\n- Weekly new Suno tracks\n- Imported/edited tracks in Ableton",
+    "Phases": "Conduct",
+    "Timeline": "Starts July 24, 2025; repeats weekly on weekends (8 hours). Deadlines: March 25, 2025 for organization/tool development.",
+    "Tags/Notes": "ProductionArea, Suno, Must"
+  },
+  "1.3.4": {
+    "Element": "Automation Bot Development",
+    "Description": "Design, development, and integration of various bots and automation tools to streamline processes.",
+    "Deliverables": "- Task Merging Bot\n- Batch Researching Bot\n- Hashtag Bot for bulk task additions\n- API and automation integrations",
+    "Phases": "Setup, Develop, Control, Research, Optimize",
+    "Timeline": "Various bots listed as backlog tasks. Task Merging Bot is active.",
+    "Tags/Notes": "ToolsF, AdminF, AI, Automation"
+  },
+  "1.3.5": {
+    "Element": "Knowledge Management Tool Optimization",
+    "Description": "Ongoing setup, maintenance, and optimization of digital tools, databases, and knowledge management systems.",
+    "Deliverables": "- Organized Obsidian vaults\n- Updated guides\n- Streamlined Notion projects\n- Optimized system performance\n- Updated macros",
+    "Phases": "Setup, Optimize, Control, Review",
+    "Timeline": "Manage Tools repeats weekly on Thursdays. Fix Macros due July 24, 2025.",
+    "Tags/Notes": "AdminF, ToolsF, Maintain, Should"
+  },
+  "1.4.1": {
+    "Element": "Bankruptcy Process (CH7-BK-2025)",
+    "Description": "Significant personal and financial process, specifically executing Chapter 7 Bankruptcy.",
+    "Deliverables": "Completion of Chapter 7 Bankruptcy process and financial reorganization.",
+    "Phases": "Setup, Conduct, Control, Finance",
+    "Timeline": "Task entry date: July 24, 2025 (estimated 600 minutes)",
+    "Tags/Notes": "H-Impact-H-Effort, Must, Blocked, PersonalArea"
+  },
+  "1.4.2": {
+    "Element": "Budget & Financial Control",
+    "Description": "Managing financial aspects and budgeting, including setting and controlling budgets.",
+    "Deliverables": "- Set budgets\n- Updated financial records\n- Controlled finances\n- Monthly Distrokid updates",
+    "Phases": "Control, Finance, Review, Market",
+    "Timeline": "Set Budget repeats weekly, skipping weekends. Monthly Distrokid updates.",
+    "Tags/Notes": "Maintain, Must, PersonalF"
+  }
+};
+
+function deliverableLines(text) {
+  return String(text || "").split(/\n/).map(l => l.replace(/^[-•]\s*/, "").trim()).filter(Boolean);
+}
+
+function generateInitialTasks(dictionary) {
+  const tasks = [];
+  let idCounter = 1;
+  Object.keys(dictionary).forEach(wbsId => {
+    deliverableLines(dictionary[wbsId].Deliverables).forEach(task => {
+      tasks.push({ id: idCounter++, task, wbs: wbsId, status: "To Do", priority: "", due: "", assigned: "" });
+    });
+  });
+  return tasks;
+}
+
+function buildSeed() {
+  return {
+    structure: clone(SEED_STRUCTURE),
+    dictionary: clone(SEED_DICTIONARY),
+    tasks: generateInitialTasks(SEED_DICTIONARY),
+    reports: [],
+    assets: [],
+    pages: { "Project Overview": OVERVIEW_MD },
+  };
+}
+
+function clone(o) { return JSON.parse(JSON.stringify(o)); }
+
+const SEED = buildSeed();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return clone(SEED);
+    const parsed = JSON.parse(raw);
+    if (!parsed || !parsed.structure || !parsed.dictionary || !parsed.tasks) return clone(SEED);
+    parsed.reports = parsed.reports || [];
+    parsed.assets = parsed.assets || [];
+    parsed.pages = parsed.pages || {};
+    return parsed;
+  } catch (e) { return clone(SEED); }
+}
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
+function resetState() { state = clone(SEED); saveState(); render(); }
+
+let state = loadState();
+
+function nextTaskId() {
+  return state.tasks.reduce((m, t) => Math.max(m, Number(t.id) || 0), 0) + 1;
+}
+function nextGenericId(list) {
+  return list.reduce((m, r) => Math.max(m, Number(r.id) || 0), 0) + 1;
+}
+
+// ---------- lookups ----------
+function allElements() {
+  const out = [];
+  state.structure.branches.forEach(b => b.elements.forEach(el => out.push({ branch: b, el })));
+  return out;
+}
+function findElement(id) { return allElements().find(x => x.el.id === id) || null; }
+function branchOf(wbsId) {
+  const parts = String(wbsId || "").split(".");
+  const bid = parts.slice(0, 2).join(".");
+  return state.structure.branches.find(b => b.id === bid) || null;
+}
+function elementName(wbsId) {
+  const found = findElement(wbsId);
+  if (found) return found.el.name;
+  const d = state.dictionary[wbsId];
+  return d ? d.Element : wbsId;
+}
+function entryTags(wbsId) {
+  const d = state.dictionary[wbsId];
+  if (!d) return [];
+  return String(d["Tags/Notes"] || "").split(",").map(t => t.trim()).filter(Boolean);
+}
+function getUniqueTags() {
+  const set = new Set();
+  Object.keys(state.dictionary).forEach(id => entryTags(id).forEach(t => set.add(t)));
+  return Array.from(set).sort();
+}
+function branchIds() { return state.structure.branches.map(b => b.id); }
+function branchLabel(b) { return b.id + " " + b.name; }
+
+// ---------- markdown ----------
+function esc(s) {
+  return String(s == null ? "" : s)
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+function inlineMd(escaped) {
+  return escaped
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+    .replace(/`([^`]+)`/g, "<code>$1</code>");
+}
+function parseMarkdown(md) {
+  const lines = String(md == null ? "" : md).split(/\n/);
+  const out = [];
+  let inList = false;
+  lines.forEach(l => {
+    if (l.startsWith("- ")) {
+      if (!inList) { out.push("<ul>"); inList = true; }
+      out.push("<li>" + inlineMd(esc(l.slice(2))) + "</li>");
+      return;
+    }
+    if (inList) { out.push("</ul>"); inList = false; }
+    if (l.startsWith("### ")) out.push("<h3>" + inlineMd(esc(l.slice(4))) + "</h3>");
+    else if (l.startsWith("## ")) out.push("<h2>" + inlineMd(esc(l.slice(3))) + "</h2>");
+    else if (l.startsWith("# ")) out.push("<h1>" + inlineMd(esc(l.slice(2))) + "</h1>");
+    else out.push("<p>" + inlineMd(esc(l)) + "</p>");
+  });
+  if (inList) out.push("</ul>");
+  return out.join("");
+}
+
+// ---------- shared UI helpers ----------
+const app = document.getElementById("app");
+const topNav = document.getElementById("top-nav");
+
+function goRoute(route) { location.hash = "#/" + route; }
+
+function tag(text, cls) { return '<span class="tag ' + (cls || "") + '">' + esc(text) + "</span>"; }
+function statusClass(s) { return "st-" + String(s || "").toLowerCase().replace(/\s+/g, "-"); }
+function priorityClass(p) { return p ? "pri-" + String(p).toLowerCase() : ""; }
+function emptyMsg(text) { const d = document.createElement("div"); d.className = "empty"; d.textContent = text; return d; }
+
+function barRow(label, val, max, valText) {
+  const row = document.createElement("div"); row.className = "bar-row";
+  const pct = max > 0 ? Math.round((val / max) * 100) : 0;
+  row.innerHTML = '<span class="bar-label"></span><span class="bar-track"><span class="bar-fill" style="width:' + pct + '%"></span></span><span class="bar-val"></span>';
+  row.querySelector(".bar-label").textContent = label;
+  row.querySelector(".bar-val").textContent = valText;
+  return row;
+}
+
+function pillGroup(label, values, stateSet, onChange) {
+  const group = document.createElement("div"); group.className = "filter-group";
+  group.innerHTML = '<span class="fg-label"></span>';
+  group.querySelector(".fg-label").textContent = label;
+  const scroll = document.createElement("div"); scroll.className = "pill-scroll";
+  values.forEach(v => {
+    const pill = document.createElement("button"); pill.type = "button";
+    pill.className = "pill" + (stateSet.has(v) ? " active" : "");
+    pill.textContent = v;
+    pill.addEventListener("click", () => {
+      if (stateSet.has(v)) stateSet.delete(v); else stateSet.add(v);
+      pill.classList.toggle("active"); onChange();
+    });
+    scroll.appendChild(pill);
+  });
+  group.appendChild(scroll);
+  return group;
+}
+
+function field(label, input) {
+  const f = document.createElement("div"); f.className = "edit-field";
+  const l = document.createElement("label"); l.textContent = label;
+  f.appendChild(l); f.appendChild(input); return f;
+}
+function textInput(value, type) {
+  const i = document.createElement("input"); i.type = type || "text"; i.value = value == null ? "" : value; return i;
+}
+function textArea(value, rows) {
+  const t = document.createElement("textarea"); t.rows = rows || 4; t.value = value == null ? "" : value; return t;
+}
+function selectInput(values, current, labels) {
+  const s = document.createElement("select");
+  values.forEach((v, i) => {
+    const o = document.createElement("option");
+    o.value = v; o.textContent = labels ? labels[i] : (v === "" ? "—" : v);
+    if (v === current) o.selected = true;
+    s.appendChild(o);
+  });
+  return s;
+}
+function sectionEl(titleHtml) {
+  const s = document.createElement("div"); s.className = "section";
+  const h = document.createElement("h2"); h.innerHTML = titleHtml;
+  s.appendChild(h); return s;
+}
+function kv(k, v) {
+  const d = document.createElement("div"); d.className = "kv";
+  const ks = document.createElement("span"); ks.className = "k"; ks.textContent = k;
+  const vs = document.createElement("span"); vs.className = "v"; vs.textContent = v;
+  d.appendChild(ks); d.appendChild(vs); return d;
+}
+
+// ---------- routing ----------
+function render() {
+  const route = (location.hash.replace(/^#\/?/, "") || "overview").split("/")[0];
+  const kids = topNav.children;
+  for (let i = 0; i < kids.length; i++) kids[i].classList.toggle("active", kids[i].dataset.route === route);
+  if (route === "overview") renderOverview();
+  else if (route === "wbs") renderWbs();
+  else if (route === "dictionary") renderDictionary();
+  else if (route === "tasks") renderTasks();
+  else if (route === "reports") renderReports();
+  else if (route === "assets") renderAssets();
+  else if (route === "library") renderLibrary();
+  else renderOverview();
+  renderEditToolbar();
+}
+
+(function () {
+  const kids = topNav.children;
+  for (let i = 0; i < kids.length; i++) {
+    (function (a) { a.addEventListener("click", function () { goRoute(a.dataset.route); }); })(kids[i]);
+  }
+})();
+window.addEventListener("hashchange", render);
+
+function renderEditToolbar() {
+  const bar = document.getElementById("edit-toolbar");
+  bar.innerHTML = "";
+  const exportBtn = document.createElement("button");
+  exportBtn.className = "btn"; exportBtn.textContent = "Export data";
+  exportBtn.addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "wbs-portfolio-data.json"; a.click();
+    URL.revokeObjectURL(url);
+  });
+  const importBtn = document.createElement("button");
+  importBtn.className = "btn"; importBtn.textContent = "Import data";
+  const fileInput = document.createElement("input");
+  fileInput.type = "file"; fileInput.accept = "application/json"; fileInput.style.display = "none";
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (parsed && parsed.structure && parsed.dictionary && parsed.tasks) {
+          parsed.reports = parsed.reports || [];
+          parsed.assets = parsed.assets || [];
+          parsed.pages = parsed.pages || {};
+          state = parsed; saveState(); render();
+        } else alert("That file doesn't look like WBS Portfolio data.");
+      } catch (e) { alert("Couldn't parse that file."); }
+    };
+    reader.readAsText(file);
+  });
+  importBtn.addEventListener("click", () => fileInput.click());
+  const resetBtn = document.createElement("button");
+  resetBtn.className = "btn danger"; resetBtn.textContent = "Reset demo data";
+  resetBtn.addEventListener("click", () => { if (confirm("Reset all data back to the original seed?")) resetState(); });
+  bar.appendChild(exportBtn); bar.appendChild(importBtn); bar.appendChild(fileInput); bar.appendChild(resetBtn);
+}
+
+// ---------- Overview ----------
+function renderOverview() {
+  app.innerHTML = "";
+  const elements = allElements();
+  const done = state.tasks.filter(t => t.status === "Done").length;
+  const inProgress = state.tasks.filter(t => t.status === "In Progress").length;
+
+  const statGrid = document.createElement("div"); statGrid.className = "stat-grid";
+  [
+    ["WBS Elements", elements.length],
+    ["Dictionary Entries", Object.keys(state.dictionary).length],
+    ["Tasks", state.tasks.length],
+    ["In Progress", inProgress],
+    ["Done", done],
+    ["Library Pages", Object.keys(state.pages).length],
+  ].forEach(pair => {
+    const card = document.createElement("div"); card.className = "stat-card";
+    card.innerHTML = '<div class="num"></div><div class="label"></div>';
+    card.querySelector(".num").textContent = pair[1];
+    card.querySelector(".label").textContent = pair[0];
+    statGrid.appendChild(card);
+  });
+  app.appendChild(statGrid);
+
+  const prog = sectionEl("Task Completion by Branch");
+  app.appendChild(prog);
+  state.structure.branches.forEach(b => {
+    const ids = b.elements.map(e => e.id);
+    const branchTasks = state.tasks.filter(t => ids.indexOf(t.wbs) !== -1);
+    const d = branchTasks.filter(t => t.status === "Done").length;
+    prog.appendChild(barRow(branchLabel(b), d, Math.max(branchTasks.length, 1), d + "/" + branchTasks.length));
+  });
+
+  const load = sectionEl("Tasks per Branch");
+  app.appendChild(load);
+  const counts = state.structure.branches.map(b => {
+    const ids = b.elements.map(e => e.id);
+    return { b: b, n: state.tasks.filter(t => ids.indexOf(t.wbs) !== -1).length };
+  });
+  const maxN = Math.max.apply(null, counts.map(c => c.n).concat([1]));
+  counts.forEach(c => load.appendChild(barRow(branchLabel(c.b), c.n, maxN, c.n + " tasks")));
+
+  const st = sectionEl("Status Mix");
+  app.appendChild(st);
+  const maxS = Math.max.apply(null, STATUSES.map(s => state.tasks.filter(t => t.status === s).length).concat([1]));
+  STATUSES.forEach(s => {
+    const n = state.tasks.filter(t => t.status === s).length;
+    st.appendChild(barRow(s, n, maxS, n + " tasks"));
+  });
+
+  const notes = sectionEl("Program Notes");
+  app.appendChild(notes);
+  const md = document.createElement("div"); md.className = "md";
+  md.innerHTML = parseMarkdown(state.pages["Project Overview"] != null ? state.pages["Project Overview"] : OVERVIEW_MD);
+  notes.appendChild(md);
+}
+
+// ---------- WBS ----------
+const wbsOpen = {};
+function renderWbs() {
+  app.innerHTML = "";
+  const head = document.createElement("div"); head.className = "filter-toolbar-row";
+  const h2 = document.createElement("h2");
+  h2.innerHTML = 'Work Breakdown Structure <span class="count">(' + allElements().length + ' elements)</span>';
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn primary"; addBtn.textContent = "+ New Element";
+  addBtn.addEventListener("click", () => openElementForm(null, "wbs"));
+  head.appendChild(h2); head.appendChild(addBtn);
+  app.appendChild(head);
+
+  const rootUl = document.createElement("ul"); rootUl.className = "wbs";
+  app.appendChild(rootUl);
+
+  const rootLi = document.createElement("li");
+  const rootNode = document.createElement("div"); rootNode.className = "wbs-node root";
+  const rootLabel = document.createElement("span"); rootLabel.className = "label";
+  rootLabel.textContent = state.structure.root;
+  rootNode.appendChild(rootLabel);
+  rootLi.appendChild(rootNode);
+  rootUl.appendChild(rootLi);
+
+  const branchUl = document.createElement("ul");
+  rootLi.appendChild(branchUl);
+
+  state.structure.branches.forEach(b => {
+    const bLi = document.createElement("li");
+    const bNode = document.createElement("div"); bNode.className = "wbs-node branch";
+    const bLabel = document.createElement("span"); bLabel.className = "label";
+    bLabel.textContent = branchLabel(b);
+    const bCount = document.createElement("span"); bCount.className = "count";
+    bCount.textContent = b.elements.length + " elements";
+    bNode.appendChild(bLabel); bNode.appendChild(bCount);
+    bLi.appendChild(bNode);
+    const eUl = document.createElement("ul");
+    bLi.appendChild(eUl);
+    branchUl.appendChild(bLi);
+
+    b.elements.forEach(el => {
+      const eLi = document.createElement("li");
+      const node = document.createElement("div"); node.className = "wbs-node leaf";
+      const label = document.createElement("span"); label.className = "label";
+      label.innerHTML = tag(el.id, "wbs");
+      const nameSpan = document.createElement("span");
+      nameSpan.textContent = el.name;
+      label.appendChild(nameSpan);
+      node.appendChild(label);
+
+      const actions = document.createElement("div"); actions.className = "actions";
+      const toggleBtn = document.createElement("button");
+      toggleBtn.className = "btn small";
+      toggleBtn.textContent = wbsOpen[el.id] ? "Hide details" : "Details";
+      const editBtn = document.createElement("button");
+      editBtn.className = "btn small"; editBtn.textContent = "Edit";
+      editBtn.addEventListener("click", () => openElementForm(el.id, "wbs"));
+      actions.appendChild(toggleBtn); actions.appendChild(editBtn);
+      node.appendChild(actions);
+      eLi.appendChild(node);
+
+      const detail = document.createElement("div"); detail.className = "wbs-detail";
+      detail.style.display = wbsOpen[el.id] ? "block" : "none";
+      fillDetail(detail, el.id);
+      eLi.appendChild(detail);
+
+      toggleBtn.addEventListener("click", () => {
+        wbsOpen[el.id] = !wbsOpen[el.id];
+        detail.style.display = wbsOpen[el.id] ? "block" : "none";
+        toggleBtn.textContent = wbsOpen[el.id] ? "Hide details" : "Details";
+      });
+
+      eUl.appendChild(eLi);
+    });
+  });
+}
+
+function fillDetail(container, wbsId) {
+  container.innerHTML = "";
+  const d = state.dictionary[wbsId];
+  if (!d) {
+    container.appendChild(emptyMsg("No dictionary entry for " + wbsId + " yet."));
+    const add = document.createElement("button");
+    add.className = "btn small primary"; add.textContent = "Add dictionary entry";
+    add.addEventListener("click", () => openElementForm(wbsId, "wbs"));
+    container.appendChild(add);
+    return;
+  }
+  container.appendChild(kv("Element", d.Element));
+  container.appendChild(kv("Description", d.Description));
+  container.appendChild(kv("Deliverables", d.Deliverables));
+  container.appendChild(kv("Phases", d.Phases));
+  container.appendChild(kv("Timeline", d.Timeline));
+  container.appendChild(kv("Tags/Notes", d["Tags/Notes"]));
+  const tasks = state.tasks.filter(t => t.wbs === wbsId);
+  const doneN = tasks.filter(t => t.status === "Done").length;
+  container.appendChild(kv("Linked Tasks", doneN + " of " + tasks.length + " done"));
+}
+
+// ---------- Dictionary ----------
+const dictFilter = { tags: new Set(), branches: new Set(), query: "" };
+function renderDictionary() {
+  app.innerHTML = "";
+  const head = document.createElement("div"); head.className = "filter-toolbar-row";
+  const h2 = document.createElement("h2");
+  h2.innerHTML = 'WBS Dictionary <span class="count">(' + Object.keys(state.dictionary).length + ')</span>';
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn primary"; addBtn.textContent = "+ New Element";
+  addBtn.addEventListener("click", () => openElementForm(null, "dictionary"));
+  head.appendChild(h2); head.appendChild(addBtn);
+  app.appendChild(head);
+
+  const search = document.createElement("input");
+  search.type = "search"; search.placeholder = "Search element or description…"; search.value = dictFilter.query;
+  app.appendChild(search);
+
+  const filterBar = document.createElement("div"); filterBar.className = "filter-bar";
+  filterBar.style.marginTop = ".8rem";
+  app.appendChild(filterBar);
+  filterBar.appendChild(pillGroup("Branch", branchIds(), dictFilter.branches, () => draw()));
+  filterBar.appendChild(pillGroup("Tag", getUniqueTags(), dictFilter.tags, () => draw()));
+
+  const ul = document.createElement("ul"); ul.className = "entities"; ul.style.marginTop = "1rem";
+  app.appendChild(ul);
+  const empty = emptyMsg("No dictionary entries match."); empty.style.display = "none";
+  app.appendChild(empty);
+
+  function draw() {
+    dictFilter.query = search.value;
+    const q = search.value.trim().toLowerCase();
+    ul.innerHTML = "";
+    const rows = Object.keys(state.dictionary).sort().filter(id => {
+      const d = state.dictionary[id];
+      const hay = (id + " " + d.Element + " " + d.Description).toLowerCase();
+      if (q && hay.indexOf(q) === -1) return false;
+      if (dictFilter.branches.size) {
+        const b = branchOf(id);
+        if (!b || !dictFilter.branches.has(b.id)) return false;
+      }
+      if (dictFilter.tags.size) {
+        const tags = entryTags(id);
+        let ok = true;
+        dictFilter.tags.forEach(t => { if (tags.indexOf(t) === -1) ok = false; });
+        if (!ok) return false;
+      }
+      return true;
+    });
+    empty.style.display = rows.length ? "none" : "block";
+    rows.forEach(id => ul.appendChild(dictRow(id)));
+  }
+  search.addEventListener("input", draw);
+  draw();
+}
+
+function dictRow(id) {
+  const d = state.dictionary[id];
+  const li = document.createElement("li"); li.className = "entity";
+  const left = document.createElement("div");
+  left.style.flex = "1"; left.style.minWidth = "200px";
+  left.innerHTML = '<div class="main"></div><div class="meta"></div>';
+  left.querySelector(".main").innerHTML = tag(id, "wbs");
+  const nm = document.createElement("span"); nm.textContent = d.Element;
+  left.querySelector(".main").appendChild(nm);
+  left.querySelector(".meta").textContent = d.Description;
+  const tagWrap = document.createElement("div");
+  tagWrap.innerHTML = entryTags(id).map(t => tag(t)).join("");
+  left.appendChild(tagWrap);
+  li.appendChild(left);
+  const actions = document.createElement("div"); actions.className = "actions";
+  const editBtn = document.createElement("button");
+  editBtn.className = "btn small"; editBtn.textContent = "Edit";
+  editBtn.addEventListener("click", () => openElementForm(id, "dictionary"));
+  actions.appendChild(editBtn);
+  li.appendChild(actions);
+  return li;
+}
+
+function openElementForm(id, backRoute) {
+  const back = backRoute || "wbs";
+  const found = id ? findElement(id) : null;
+  const dict = id ? state.dictionary[id] : null;
+  const existing = !!(found || dict);
+  const draft = {
+    id: id || "",
+    branch: found ? found.branch.id : (branchOf(id) ? branchOf(id).id : state.structure.branches[0].id),
+    name: found ? found.el.name : (dict ? dict.Element : ""),
+    description: dict ? dict.Description : "",
+    deliverables: dict ? dict.Deliverables : "",
+    phases: dict ? dict.Phases : "",
+    timeline: dict ? dict.Timeline : "",
+    tags: dict ? dict["Tags/Notes"] : "",
+  };
+
+  app.innerHTML = "";
+  const h2 = document.createElement("h2");
+  h2.textContent = existing ? "Edit WBS Element " + (id || "") : "New WBS Element";
+  app.appendChild(h2);
+  const panel = document.createElement("div"); panel.className = "edit-panel";
+  app.appendChild(panel);
+
+  const branchSelect = selectInput(branchIds(), draft.branch, state.structure.branches.map(branchLabel));
+  const nameInput = textInput(draft.name);
+  const descInput = textArea(draft.description, 3);
+  const delivInput = textArea(draft.deliverables, 5);
+  const phasesInput = textInput(draft.phases);
+  const timelineInput = textInput(draft.timeline);
+  const tagsInput = textInput(draft.tags);
+
+  const row1 = document.createElement("div"); row1.className = "edit-row";
+  row1.appendChild(field("Branch", branchSelect));
+  row1.appendChild(field("Element name", nameInput));
+  panel.appendChild(row1);
+  panel.appendChild(field("Description", descInput));
+  panel.appendChild(field("Deliverables (one per line)", delivInput));
+  const row2 = document.createElement("div"); row2.className = "edit-row";
+  row2.appendChild(field("Phases", phasesInput));
+  row2.appendChild(field("Timeline", timelineInput));
+  panel.appendChild(row2);
+  panel.appendChild(field("Tags/Notes (comma separated)", tagsInput));
+
+  const actions = document.createElement("div"); actions.className = "edit-actions";
+  const saveBtn = document.createElement("button"); saveBtn.className = "btn primary"; saveBtn.textContent = "Save";
+  saveBtn.addEventListener("click", () => {
+    const name = nameInput.value.trim() || "Untitled element";
+    const branchId = branchSelect.value;
+    const branch = state.structure.branches.find(b => b.id === branchId) || state.structure.branches[0];
+    let wbsId = id;
+    if (!wbsId) {
+      let n = 1;
+      while (branch.elements.some(e => e.id === branch.id + "." + n)) n++;
+      wbsId = branch.id + "." + n;
+    }
+    const already = findElement(wbsId);
+    if (already) {
+      already.el.name = name;
+      if (already.branch.id !== branch.id) {
+        already.branch.elements = already.branch.elements.filter(e => e.id !== wbsId);
+        branch.elements.push(already.el);
+      }
+    } else {
+      branch.elements.push({ id: wbsId, name: name });
+    }
+    state.dictionary[wbsId] = {
+      "Element": name,
+      "Description": descInput.value.trim(),
+      "Deliverables": delivInput.value,
+      "Phases": phasesInput.value.trim(),
+      "Timeline": timelineInput.value.trim(),
+      "Tags/Notes": tagsInput.value.trim(),
+    };
+    saveState(); goRoute(back); render();
+  });
+  const cancelBtn = document.createElement("button"); cancelBtn.className = "btn"; cancelBtn.textContent = "Cancel";
+  cancelBtn.addEventListener("click", () => { goRoute(back); render(); });
+  actions.appendChild(saveBtn); actions.appendChild(cancelBtn);
+
+  if (existing && id) {
+    const delBtn = document.createElement("button"); delBtn.className = "btn danger"; delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", () => {
+      if (!confirm("Delete element " + id + ", its dictionary entry, and its tasks?")) return;
+      state.structure.branches.forEach(b => { b.elements = b.elements.filter(e => e.id !== id); });
+      delete state.dictionary[id];
+      state.tasks = state.tasks.filter(t => t.wbs !== id);
+      saveState(); goRoute(back); render();
+    });
+    actions.appendChild(delBtn);
+  }
+  panel.appendChild(actions);
+}
+
+// ---------- Tasks ----------
+const taskFilter = { status: new Set(), priority: new Set(), branches: new Set(), query: "" };
+function renderTasks() {
+  app.innerHTML = "";
+  const head = document.createElement("div"); head.className = "filter-toolbar-row";
+  const h2 = document.createElement("h2");
+  h2.innerHTML = 'Task Tracker <span class="count">(' + state.tasks.length + ')</span>';
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn primary"; addBtn.textContent = "+ New Task";
+  addBtn.addEventListener("click", () => openTaskForm(null));
+  head.appendChild(h2); head.appendChild(addBtn);
+  app.appendChild(head);
+
+  const search = document.createElement("input");
+  search.type = "search"; search.placeholder = "Search tasks…"; search.value = taskFilter.query;
+  app.appendChild(search);
+
+  const filterBar = document.createElement("div"); filterBar.className = "filter-bar";
+  filterBar.style.marginTop = ".8rem";
+  app.appendChild(filterBar);
+  filterBar.appendChild(pillGroup("Status", STATUSES, taskFilter.status, () => draw()));
+  filterBar.appendChild(pillGroup("Priority", PRIORITIES, taskFilter.priority, () => draw()));
+  filterBar.appendChild(pillGroup("Branch", branchIds(), taskFilter.branches, () => draw()));
+
+  const ul = document.createElement("ul"); ul.className = "entities"; ul.style.marginTop = "1rem";
+  app.appendChild(ul);
+  const empty = emptyMsg("No tasks match."); empty.style.display = "none";
+  app.appendChild(empty);
+
+  function draw() {
+    taskFilter.query = search.value;
+    const q = search.value.trim().toLowerCase();
+    ul.innerHTML = "";
+    const rows = filteredTasks(q);
+    empty.style.display = rows.length ? "none" : "block";
+    rows.forEach(t => ul.appendChild(taskRow(t, draw)));
+  }
+  search.addEventListener("input", draw);
+  draw();
+}
+
+function filteredTasks(q) {
+  return state.tasks.filter(t => {
+    const hay = (t.task + " " + t.wbs + " " + (t.assigned || "")).toLowerCase();
+    if (q && hay.indexOf(q) === -1) return false;
+    if (taskFilter.status.size && !taskFilter.status.has(t.status)) return false;
+    if (taskFilter.priority.size && !taskFilter.priority.has(t.priority)) return false;
+    if (taskFilter.branches.size) {
+      const b = branchOf(t.wbs);
+      if (!b || !taskFilter.branches.has(b.id)) return false;
+    }
+    return true;
+  });
+}
+
+function taskRow(t, redraw) {
+  const li = document.createElement("li"); li.className = "entity";
+  const left = document.createElement("div");
+  left.style.flex = "1"; left.style.minWidth = "200px";
+  left.innerHTML = '<div class="main"></div><div class="meta"></div>';
+  const main = left.querySelector(".main");
+  main.innerHTML = tag(t.wbs || "—", "wbs");
+  const title = document.createElement("span"); title.textContent = t.task;
+  main.appendChild(title);
+  main.insertAdjacentHTML("beforeend", tag(t.status, statusClass(t.status)) + (t.priority ? tag(t.priority, priorityClass(t.priority)) : ""));
+  const bits = [elementName(t.wbs)];
+  if (t.due) bits.push("due " + t.due);
+  if (t.assigned) bits.push(t.assigned);
+  left.querySelector(".meta").textContent = bits.join(" · ");
+  li.appendChild(left);
+
+  const actions = document.createElement("div"); actions.className = "actions";
+  const advBtn = document.createElement("button");
+  advBtn.className = "btn small";
+  advBtn.textContent = t.status === "Done" ? "Reopen" : "Advance";
+  advBtn.addEventListener("click", () => {
+    const i = STATUSES.indexOf(t.status);
+    t.status = t.status === "Done" ? "To Do" : STATUSES[Math.min(i + 1, STATUSES.length - 1)];
+    saveState(); if (redraw) redraw(); else render();
+  });
+  const editBtn = document.createElement("button");
+  editBtn.className = "btn small"; editBtn.textContent = "Edit";
+  editBtn.addEventListener("click", () => openTaskForm(t.id));
+  actions.appendChild(advBtn); actions.appendChild(editBtn);
+  li.appendChild(actions);
+  return li;
+}
+
+function findTask(id) { return state.tasks.find(t => String(t.id) === String(id)) || null; }
+
+function openTaskForm(id) {
+  const existing = id != null ? findTask(id) : null;
+  const elementIds = allElements().map(x => x.el.id);
+  const draft = existing ? {
+    task: existing.task, wbs: existing.wbs, status: existing.status,
+    priority: existing.priority, due: existing.due, assigned: existing.assigned,
+  } : { task: "", wbs: elementIds[0] || "", status: "To Do", priority: "", due: "", assigned: "" };
+
+  app.innerHTML = "";
+  const h2 = document.createElement("h2"); h2.textContent = existing ? "Edit Task" : "New Task";
+  app.appendChild(h2);
+  const panel = document.createElement("div"); panel.className = "edit-panel";
+  app.appendChild(panel);
+
+  const taskInput = textInput(draft.task);
+  const wbsSelect = selectInput(elementIds, draft.wbs, allElements().map(x => x.el.id + " " + x.el.name));
+  const statusSelect = selectInput(STATUSES, draft.status);
+  const prioritySelect = selectInput([""].concat(PRIORITIES), draft.priority, ["None"].concat(PRIORITIES));
+  const dueInput = textInput(draft.due, "date");
+  const assignedInput = textInput(draft.assigned);
+
+  panel.appendChild(field("Task", taskInput));
+  const row1 = document.createElement("div"); row1.className = "edit-row";
+  row1.appendChild(field("WBS Element", wbsSelect));
+  panel.appendChild(row1);
+  const row2 = document.createElement("div"); row2.className = "edit-row";
+  row2.appendChild(field("Status", statusSelect));
+  row2.appendChild(field("Priority", prioritySelect));
+  row2.appendChild(field("Due date", dueInput));
+  row2.appendChild(field("Assigned to", assignedInput));
+  panel.appendChild(row2);
+
+  const actions = document.createElement("div"); actions.className = "edit-actions";
+  const saveBtn = document.createElement("button"); saveBtn.className = "btn primary"; saveBtn.textContent = "Save";
+  saveBtn.addEventListener("click", () => {
+    const payload = {
+      task: taskInput.value.trim() || "Untitled task",
+      wbs: wbsSelect.value,
+      status: statusSelect.value,
+      priority: prioritySelect.value,
+      due: dueInput.value,
+      assigned: assignedInput.value.trim(),
+    };
+    if (existing) Object.assign(existing, payload);
+    else state.tasks.push(Object.assign({ id: nextTaskId() }, payload));
+    saveState(); goRoute("tasks"); render();
+  });
+  const cancelBtn = document.createElement("button"); cancelBtn.className = "btn"; cancelBtn.textContent = "Cancel";
+  cancelBtn.addEventListener("click", () => { goRoute("tasks"); render(); });
+  actions.appendChild(saveBtn); actions.appendChild(cancelBtn);
+  if (existing) {
+    const delBtn = document.createElement("button"); delBtn.className = "btn danger"; delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", () => {
+      if (!confirm("Delete this task?")) return;
+      state.tasks = state.tasks.filter(t => String(t.id) !== String(existing.id));
+      saveState(); goRoute("tasks"); render();
+    });
+    actions.appendChild(delBtn);
+  }
+  panel.appendChild(actions);
+}
+
+// ---------- Reports ----------
+function renderReports() {
+  app.innerHTML = "";
+  const head = document.createElement("div"); head.className = "filter-toolbar-row";
+  const h2 = document.createElement("h2");
+  h2.innerHTML = 'Status Reports <span class="count">(' + state.reports.length + ')</span>';
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn primary"; addBtn.textContent = "+ New Report";
+  addBtn.addEventListener("click", () => openReportForm(null));
+  head.appendChild(h2); head.appendChild(addBtn);
+  app.appendChild(head);
+
+  const ul = document.createElement("ul"); ul.className = "entities"; ul.style.marginTop = "1rem";
+  app.appendChild(ul);
+  if (!state.reports.length) app.appendChild(emptyMsg("No status reports yet — add one to record progress, risks, and next actions."));
+  state.reports.slice().reverse().forEach(r => {
+    const li = document.createElement("li"); li.className = "entity";
+    const left = document.createElement("div");
+    left.style.flex = "1"; left.style.minWidth = "200px";
+    left.innerHTML = '<div class="main"></div><div class="meta"></div>';
+    left.querySelector(".main").innerHTML = tag(r.wbs, "wbs");
+    const nm = document.createElement("span"); nm.textContent = elementName(r.wbs);
+    left.querySelector(".main").appendChild(nm);
+    left.querySelector(".meta").textContent = r.date + " · " + (r.status || "(no update)");
+    if (r.risks) left.appendChild(kv("Risks", r.risks));
+    if (r.actions) left.appendChild(kv("Next Actions", r.actions));
+    li.appendChild(left);
+    const actions = document.createElement("div"); actions.className = "actions";
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn small"; editBtn.textContent = "Edit";
+    editBtn.addEventListener("click", () => openReportForm(r.id));
+    actions.appendChild(editBtn);
+    li.appendChild(actions);
+    ul.appendChild(li);
+  });
+}
+
+function openReportForm(id) {
+  const existing = id != null ? state.reports.find(r => String(r.id) === String(id)) : null;
+  const elementIds = Object.keys(state.dictionary).sort();
+  const draft = existing ? Object.assign({}, existing)
+    : { date: new Date().toISOString().slice(0, 10), wbs: elementIds[0] || "", status: "", risks: "", actions: "" };
+
+  app.innerHTML = "";
+  const h2 = document.createElement("h2"); h2.textContent = existing ? "Edit Status Report" : "New Status Report";
+  app.appendChild(h2);
+  const panel = document.createElement("div"); panel.className = "edit-panel";
+  app.appendChild(panel);
+
+  const dateInput = textInput(draft.date, "date");
+  const wbsSelect = selectInput(elementIds, draft.wbs, elementIds.map(i => i + " – " + state.dictionary[i].Element));
+  const statusInput = textArea(draft.status, 3);
+  const risksInput = textArea(draft.risks, 3);
+  const actionsInput = textArea(draft.actions, 3);
+
+  const row = document.createElement("div"); row.className = "edit-row";
+  row.appendChild(field("Date", dateInput));
+  row.appendChild(field("WBS ID", wbsSelect));
+  panel.appendChild(row);
+  panel.appendChild(field("Status Update", statusInput));
+  panel.appendChild(field("Risks", risksInput));
+  panel.appendChild(field("Next Actions", actionsInput));
+
+  const acts = document.createElement("div"); acts.className = "edit-actions";
+  const saveBtn = document.createElement("button"); saveBtn.className = "btn primary"; saveBtn.textContent = "Save";
+  saveBtn.addEventListener("click", () => {
+    const payload = {
+      date: dateInput.value || new Date().toISOString().slice(0, 10),
+      wbs: wbsSelect.value,
+      status: statusInput.value.trim(),
+      risks: risksInput.value.trim(),
+      actions: actionsInput.value.trim(),
+    };
+    if (existing) Object.assign(existing, payload);
+    else state.reports.push(Object.assign({ id: nextGenericId(state.reports) }, payload));
+    saveState(); goRoute("reports"); render();
+  });
+  const cancelBtn = document.createElement("button"); cancelBtn.className = "btn"; cancelBtn.textContent = "Cancel";
+  cancelBtn.addEventListener("click", () => { goRoute("reports"); render(); });
+  acts.appendChild(saveBtn); acts.appendChild(cancelBtn);
+  if (existing) {
+    const delBtn = document.createElement("button"); delBtn.className = "btn danger"; delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", () => {
+      if (!confirm("Delete this report?")) return;
+      state.reports = state.reports.filter(r => String(r.id) !== String(existing.id));
+      saveState(); goRoute("reports"); render();
+    });
+    acts.appendChild(delBtn);
+  }
+  panel.appendChild(acts);
+}
+
+// ---------- Assets ----------
+function renderAssets() {
+  app.innerHTML = "";
+  const head = document.createElement("div"); head.className = "filter-toolbar-row";
+  const h2 = document.createElement("h2");
+  h2.innerHTML = 'Asset Catalog <span class="count">(' + state.assets.length + ')</span>';
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn primary"; addBtn.textContent = "+ New Asset";
+  addBtn.addEventListener("click", () => openAssetForm(null));
+  head.appendChild(h2); head.appendChild(addBtn);
+  app.appendChild(head);
+
+  const note = document.createElement("div"); note.className = "privacy-note";
+  note.textContent = "Catalog entries reference where a deliverable lives (a file path, a drive link, a repo). Nothing is uploaded — only the reference text you type is stored, in your browser.";
+  app.appendChild(note);
+
+  const ul = document.createElement("ul"); ul.className = "entities";
+  app.appendChild(ul);
+  if (!state.assets.length) app.appendChild(emptyMsg("No assets catalogued yet."));
+  state.assets.forEach(a => {
+    const li = document.createElement("li"); li.className = "entity";
+    const left = document.createElement("div");
+    left.style.flex = "1"; left.style.minWidth = "200px";
+    left.innerHTML = '<div class="main"></div><div class="meta"></div>';
+    left.querySelector(".main").innerHTML = a.wbs ? tag(a.wbs, "wbs") : "";
+    const nm = document.createElement("span"); nm.textContent = a.name;
+    left.querySelector(".main").appendChild(nm);
+    if (a.type) left.querySelector(".main").insertAdjacentHTML("beforeend", tag(a.type));
+    left.querySelector(".meta").textContent = [a.location, a.notes].filter(Boolean).join(" · ") || "—";
+    li.appendChild(left);
+    const actions = document.createElement("div"); actions.className = "actions";
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn small"; editBtn.textContent = "Edit";
+    editBtn.addEventListener("click", () => openAssetForm(a.id));
+    actions.appendChild(editBtn);
+    li.appendChild(actions);
+    ul.appendChild(li);
+  });
+}
+
+function openAssetForm(id) {
+  const existing = id != null ? state.assets.find(a => String(a.id) === String(id)) : null;
+  const elementIds = allElements().map(x => x.el.id);
+  const draft = existing ? Object.assign({}, existing)
+    : { name: "", type: "", wbs: elementIds[0] || "", location: "", notes: "" };
+
+  app.innerHTML = "";
+  const h2 = document.createElement("h2"); h2.textContent = existing ? "Edit Asset" : "New Asset";
+  app.appendChild(h2);
+  const panel = document.createElement("div"); panel.className = "edit-panel";
+  app.appendChild(panel);
+
+  const nameInput = textInput(draft.name);
+  const typeInput = textInput(draft.type);
+  const wbsSelect = selectInput([""].concat(elementIds), draft.wbs, ["Unassigned"].concat(allElements().map(x => x.el.id + " " + x.el.name)));
+  const locInput = textInput(draft.location);
+  const notesInput = textArea(draft.notes, 3);
+
+  const row = document.createElement("div"); row.className = "edit-row";
+  row.appendChild(field("Name", nameInput));
+  row.appendChild(field("Type", typeInput));
+  panel.appendChild(row);
+  const row2 = document.createElement("div"); row2.className = "edit-row";
+  row2.appendChild(field("WBS Element", wbsSelect));
+  row2.appendChild(field("Location / link", locInput));
+  panel.appendChild(row2);
+  panel.appendChild(field("Notes", notesInput));
+
+  const acts = document.createElement("div"); acts.className = "edit-actions";
+  const saveBtn = document.createElement("button"); saveBtn.className = "btn primary"; saveBtn.textContent = "Save";
+  saveBtn.addEventListener("click", () => {
+    const payload = {
+      name: nameInput.value.trim() || "Untitled asset",
+      type: typeInput.value.trim(),
+      wbs: wbsSelect.value,
+      location: locInput.value.trim(),
+      notes: notesInput.value.trim(),
+    };
+    if (existing) Object.assign(existing, payload);
+    else state.assets.push(Object.assign({ id: nextGenericId(state.assets) }, payload));
+    saveState(); goRoute("assets"); render();
+  });
+  const cancelBtn = document.createElement("button"); cancelBtn.className = "btn"; cancelBtn.textContent = "Cancel";
+  cancelBtn.addEventListener("click", () => { goRoute("assets"); render(); });
+  acts.appendChild(saveBtn); acts.appendChild(cancelBtn);
+  if (existing) {
+    const delBtn = document.createElement("button"); delBtn.className = "btn danger"; delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", () => {
+      if (!confirm("Delete this asset?")) return;
+      state.assets = state.assets.filter(a => String(a.id) !== String(existing.id));
+      saveState(); goRoute("assets"); render();
+    });
+    acts.appendChild(delBtn);
+  }
+  panel.appendChild(acts);
+}
+
+// ---------- Library ----------
+function renderLibrary() {
+  app.innerHTML = "";
+  const head = document.createElement("div"); head.className = "filter-toolbar-row";
+  const titles = Object.keys(state.pages).sort();
+  const h2 = document.createElement("h2");
+  h2.innerHTML = 'Knowledge Library <span class="count">(' + titles.length + ')</span>';
+  const addBtn = document.createElement("button");
+  addBtn.className = "btn primary"; addBtn.textContent = "+ New Page";
+  addBtn.addEventListener("click", () => openPageForm(null));
+  head.appendChild(h2); head.appendChild(addBtn);
+  app.appendChild(head);
+
+  if (!titles.length) { app.appendChild(emptyMsg("No pages yet — create one to start the library.")); return; }
+
+  const ul = document.createElement("ul"); ul.className = "entities";
+  app.appendChild(ul);
+  titles.forEach(t => {
+    const li = document.createElement("li"); li.className = "entity";
+    const left = document.createElement("div");
+    left.style.flex = "1"; left.style.minWidth = "200px";
+    left.innerHTML = '<div class="main"></div><div class="meta"></div>';
+    left.querySelector(".main").textContent = t;
+    const words = String(state.pages[t] || "").split(/\s+/).filter(Boolean).length;
+    left.querySelector(".meta").textContent = words + " words";
+    li.appendChild(left);
+    const actions = document.createElement("div"); actions.className = "actions";
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn small"; editBtn.textContent = "Open / Edit";
+    editBtn.addEventListener("click", () => openPageForm(t));
+    actions.appendChild(editBtn);
+    li.appendChild(actions);
+    ul.appendChild(li);
+  });
+
+  const preview = sectionEl("Preview — " + titles[0]);
+  app.appendChild(preview);
+  const md = document.createElement("div"); md.className = "md";
+  md.innerHTML = parseMarkdown(state.pages[titles[0]]);
+  preview.appendChild(md);
+}
+
+function openPageForm(title) {
+  const existing = title != null && Object.prototype.hasOwnProperty.call(state.pages, title);
+  app.innerHTML = "";
+  const h2 = document.createElement("h2"); h2.textContent = existing ? "Edit Page" : "New Page";
+  app.appendChild(h2);
+  const panel = document.createElement("div"); panel.className = "edit-panel";
+  app.appendChild(panel);
+
+  const titleInput = textInput(existing ? title : "");
+  const bodyInput = textArea(existing ? state.pages[title] : "", 12);
+  panel.appendChild(field("Title", titleInput));
+  panel.appendChild(field("Markdown", bodyInput));
+
+  const previewWrap = document.createElement("div"); previewWrap.className = "edit-field";
+  const previewLabel = document.createElement("label"); previewLabel.textContent = "Preview";
+  const previewBox = document.createElement("div"); previewBox.className = "md";
+  previewBox.innerHTML = parseMarkdown(bodyInput.value);
+  previewWrap.appendChild(previewLabel); previewWrap.appendChild(previewBox);
+  panel.appendChild(previewWrap);
+  bodyInput.addEventListener("input", () => { previewBox.innerHTML = parseMarkdown(bodyInput.value); });
+
+  const acts = document.createElement("div"); acts.className = "edit-actions";
+  const saveBtn = document.createElement("button"); saveBtn.className = "btn primary"; saveBtn.textContent = "Save";
+  saveBtn.addEventListener("click", () => {
+    const newTitle = titleInput.value.trim() || "Untitled page";
+    if (existing && newTitle !== title) delete state.pages[title];
+    state.pages[newTitle] = bodyInput.value;
+    saveState(); goRoute("library"); render();
+  });
+  const cancelBtn = document.createElement("button"); cancelBtn.className = "btn"; cancelBtn.textContent = "Cancel";
+  cancelBtn.addEventListener("click", () => { goRoute("library"); render(); });
+  acts.appendChild(saveBtn); acts.appendChild(cancelBtn);
+  if (existing) {
+    const delBtn = document.createElement("button"); delBtn.className = "btn danger"; delBtn.textContent = "Delete";
+    delBtn.addEventListener("click", () => {
+      if (!confirm("Delete this page?")) return;
+      delete state.pages[title];
+      saveState(); goRoute("library"); render();
+    });
+    acts.appendChild(delBtn);
+  }
+  panel.appendChild(acts);
+}
+
+render();
+</script>
+</body>
 </html>
